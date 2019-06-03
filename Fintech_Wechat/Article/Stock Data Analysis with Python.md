@@ -146,3 +146,106 @@ def pandas_candlestick_ohlc(dat, stick="day", adj=False, otherseries=None):
  
 pandas_candlestick_ohlc(apple, adj=True, stick="month")
 ```
+![图三](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu3.png)
+在蜡烛图中，黑色的蜡烛图标识这天的收盘价高于开盘价（赢利），而红色蜡烛表示这天的开盘价高于收盘价（亏损）。上影线和下影线表示最高价和最低价，主体表示开盘价和收盘价（颜色决定哪端是开盘价，哪端是收盘价）。蜡烛图在金融领域很流行而且[技术分析](https://en.wikipedia.org/wiki/Technical_analysis)中的一些策略根据蜡烛的形状，颜色，位置来做交易决定。今天我不会讲解这些策略。
+
+我们可能想要把多个金融工具绘制到一起；我们可能想要比较股票，把它们和市场比较，或者查看其他证券例如[ETFs](https://en.wikipedia.org/wiki/Technical_analysis)。后面我们也会查看怎样针对某个指标，例如移动平均线（moving average）去绘制一个金融工具。对于这种，你应该使用折线图而非蜡烛图。（你怎么才能绘制多个蜡烛图，一个在另一个上面而不弄乱图表?）
+
+下面，我获取了其他几个技术公司的股票数据并且把他们调整后的收盘价绘制在了一起。
+
+```Python
+microsoft, google = (quandl.get("WIKI/" + s, start_date=start, end_date=end) for s in ["MSFT", "GOOG"])
+ 
+# Below I create a DataFrame consisting of the adjusted closing price of these stocks, first by making a list of these objects and using the join method
+stocks = pd.DataFrame({"AAPL": apple["Adj. Close"],
+                      "MSFT": microsoft["Adj. Close"],
+                      "GOOG": google["Adj. Close"]})
+ 
+stocks.head()
+```
+![图四](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu4.png)
+
+```Python
+stocks.plot(grid = True)
+```
+![tu5](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu5.png)
+这幅图有什么问题呢？虽然绝对价格很重要（高价股很难购买，这不仅影响它们的波动性而且影响你交易股票的能力），但交易时，我们更关注资产的相对变化而不是它的绝对价格。谷歌的股票比微软或苹果的股票贵得多，而这种差异使得苹果和微软股票的波动性远低于它们实际的波动性（也就是说，他们的价格看着没有太多偏差）。
+
+一种解决方案是在绘图时使用两种不同的比例；一种比例用于苹果和微软，另一种用于谷歌。
+```Python
+stocks.plot(secondary_y = ["AAPL", "MSFT"], grid = True)
+```
+![tu6](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu6.png)
+然而，更好的方案是绘制我们正在想要的信息：股票的收益。这涉及到把数据转换成某种对我们的目标更有用的东西。有多种转换可供我们使用。
+
+一种转换是考虑自利息周期开始以来股票的收益。也就是说，我们用如下公式绘图：
+![tu7](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu7.png)
+这就要求转换stocks对象中的数据，我接下来就会这样做。请注意，我使用了lamda函数，它允许我把一个定义好的小函数当做参数快速传递到另一个函数或者方法中（你可以从这里阅读更多关于lamda函数的信息）。
+
+```python
+# df.apply(arg) will apply the function arg to each column in df, and return a DataFrame with the result
+# Recall that lambda x is an anonymous function accepting parameter x; in this case, x will be a pandas Series object
+stock_return = stocks.apply(lambda x: x / x[0])
+stock_return.head() - 1
+```
+![tu8](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu8.png)
+
+```python
+stock_return.plot(grid = True).axhline(y = 1, color = "black", lw = 2)
+```
+
+![tu9](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu9.png)
+这个图表更加有用。我们现在能够看到自此周期开始算起每只股票的盈利情况。此外，我们看到这些股票高度相关；他们通常朝同一方向移动，这一事实很难在其他图表中看到。
+
+或者，我们可以绘制每只股票每天的变化情况。一种方法是在比较第t天和第t + 1天时，使用下面的公式绘制一只股票的增长率：
+![tu10](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu10.png)
+但，变化可能以以下不同的方式理解：
+![tu11](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu11.png)
+这些公式不同并可能导致不同的结论，但是有另一种方法来模拟一只股票的增长：使用对数差异。
+$\Large Change_{t} = log(Price_{t}) -  log(Price_{t-1})$
+
+（这里log是自然对数，并且我们的定义不强依赖于是使用$\small log(Price_{t}) -  log(Price_{t-1})$还是$\small log(Price_{t+1}) -  log(Price_{t})$）使用对数差的优势是这种差可以被解释为股票的百分比变化，但不依赖于分数的分母。此外，对数差具有理想的性质：对数差的总和可以解释为汇总时间段的总变化（以百分比）（其他公式没有这种性质；他们会高估增长）。对数差也更加清晰地对应于股票价格在连续时间内的建模方式。
+我们可以如下获得和绘制stocks中数据的对数差：
+```python
+import numpy as np
+stock_change = stocks.apply(lambda x: np.log(x) - np.log(x.shift(1))) # shift moves dates back by 1.
+stock_change.head()
+```
+![tu13](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu13.png)
+```python
+stock_change.plot(grid = True).axhline(y = 0, color = "black", lw = 2)
+```
+![tu14](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu14.png)
+你更喜欢哪种转换？看起来，自周期开始计算收益的方式使得问题中股票的整体趋势更加明显。但是，每天之间的变化是在对股票行为进行建模时实际考虑的更高级方法。所以他们不应该被忽视。我们经常想将股票的表现与整体市场的表现进行比较。[SPY](https://finance.yahoo.com/quote/SPY/)，是SPDR标准普尔500指数交易型开放式指数基金（ETF）的股票代码，是一只试图模仿标准普尔500股票指数构成的基金，因而代表了“市场”中的价值。
+
+SPY数据不能从quandl免费获取，所以我将从雅虎财经中获取数据。（我没有选择。）
+
+下面是我获得SPY数据并将它的表现跟我们的股票表现相比较。
+
+```python
+#import pandas_datareader.data as web    # Going to get SPY from Yahoo! (I know I said you shouldn't but I didn't have a choice)
+#spyder = web.DataReader("SPY", "yahoo", start, end)    # Didn't work
+#spyder = web.DataReader("SPY", "google", start, end)    # Didn't work either
+# If all else fails, read from a file, obtained from here: http://www.nasdaq.com/symbol/spy/historical
+spyderdat = pd.read_csv("/home/curtis/Downloads/HistoricalQuotes.csv")    # Obviously specific to my system; set to
+                                                                          # location on your machine
+spyderdat = pd.DataFrame(spyderdat.loc[:, ["open", "high", "low", "close", "close"]].iloc[1:].as_matrix(),
+                         index=pd.DatetimeIndex(spyderdat.iloc[1:, 0]),
+                         columns=["Open", "High", "Low", "Close", "Adj Close"]).sort_index()
+ 
+spyder = spyderdat.loc[start:end]
+ 
+stocks = stocks.join(spyder.loc[:, "Adj Close"]).rename(columns={"Adj Close": "SPY"})
+stocks.head()
+```
+![tu15](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu15.png)
+```python
+stock_return = stocks.apply(lambda x: x / x[0])
+stock_return.plot(grid = True).axhline(y = 1, color = "black", lw = 2)
+```
+![tu16](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu16.png)
+```python
+stock_change = stocks.apply(lambda x: np.log(x) - np.log(x.shift(1)))
+stock_change.plot(grid=True).axhline(y = 0, color = "black", lw = 2)
+```
+![tu17](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu17.png)
