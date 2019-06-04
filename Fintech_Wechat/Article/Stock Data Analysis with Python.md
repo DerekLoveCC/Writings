@@ -280,12 +280,12 @@ tbill.tail()
 ```python
 tbill.plot()
 ```
-![图20]()
+![图20](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu20.png)
 ```python
 rrf = tbill.iloc[-1, 0]    # Get the most recent Treasury Bill rate
 rrf
 ```
-![图21]()
+![图21](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/tu21png.png)
 现在，线性回归模型是以下形式的模型：
 $y_{\tiny i}=\alpha+\beta x_{\tiny i} +\epsilon_{\tiny i}$
 $\epsilon_{\tiny i}$是一个错误处理。思考这个模型的另一种方式是：
