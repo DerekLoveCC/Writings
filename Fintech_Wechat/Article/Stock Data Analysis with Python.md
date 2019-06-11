@@ -34,7 +34,7 @@ apple.head()
 ``` 
 （译者注：上述程序在Jupyter Notebook中的运行情况如下图）
 ![图1](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/%E5%9B%BE1.png)
-我们简单的讨论一下，Open是交易日开始时的股票价格（不需要是上一个交易日的收盘价），High是交易日中的最高股价，Low是交易日中的最低股价，Close是交易日结束时的股价。Volume指有多少交易了股票。Adjusted Prices（例如调整后的收盘价）是因为公司行为而调整后的股价。虽然认为股价主要由交易员设定，但股票拆分（公司使每只现存股票分成两个并使价格减半）和分红（支付公司的每股利润）也会影响股价，也需要加以考虑。
+我们简单的讨论一下，Open是交易日开始时的股票价格（不需要是上一个交易日的收盘价），High是交易日中的最高股价，Low是交易日中的最低股价，Close是交易日结束时的股价。Volume指交易了多少股票。Adjusted Prices（例如调整后的收盘价）是因为公司行为而调整后的股价。虽然认为股价主要由交易员设定，但股票拆分（公司使每只现存股票分成两个并使价格减半）和分红（支付公司的每股利润）也会影响股价，也需要加以考虑。
 ### 可视化股票数据
 现在我们获得了想要可视化的股票数据了。首先，我将演示怎么使用matplotlib包来实现。注意到apple DataFrame对象有一个方便的方法，plot()，使得绘图更加方便。
 ```Python
@@ -289,8 +289,8 @@ rrf
 现在，线性回归模型是以下形式的模型：
 $y_{\tiny i}=\alpha+\beta x_{\tiny i} +\epsilon_{\tiny i}$
 $\epsilon_{\tiny i}$是一个错误处理。思考这个模型的另一种方式是：
-$\hat{y}_{\tiny i}=\alpha+\beta x_{\tiny i}$
-$\hat{y}_{\tiny i}$是给定$x_{\tiny i}$时$y_{\tiny i}$的预测值。换句话说，线性回归告诉你$x_{\tiny i}$和$y_{\tiny i}$是如何相关的，以及$x_{\tiny i}$的值如何被用于估测$y_{\tiny i}$的值的。$\alpha$是模型的截距，$\beta$是斜率。
+$\hat{y_{\tiny i}}=\alpha+\beta x_{\tiny i}$
+$\hat{y_{\tiny i}}$是给定$x_{\tiny i}$时$y_{\tiny i}$的预测值。换句话说，线性回归告诉你$x_{\tiny i}$和$y_{\tiny i}$是如何相关的，以及$x_{\tiny i}$的值如何被用于估测$y_{\tiny i}$的值的。$\alpha$是模型的截距，$\beta$是斜率。
 特别指出，如果$x$为零，则$\alpha$就是$y$的预测值，而$\beta$表示$x$每改变一个单位时$y$变化多少。在给定样本均值$\bar{x}$和$\bar{y}$，样本标准差$s_{\tiny x}$和$s_{\tiny y}$以及$x$和$y$的相关系数$r$的情况下，有一种计算$\alpha$和$\beta$的简单方法：
 $\beta = r\frac{s_y}{s_x}$
 $\alpha = \bar{y}-\beta\bar{x}$
@@ -298,7 +298,7 @@ $\alpha = \bar{y}-\beta\bar{x}$
 $R_t - r_{RF} = \alpha + \beta(R_{Mt} - r_{RF})+\epsilon_t$
 $R_t$是某个金融资产（如股票）的回报率，$R_t-r_{RF}$表示多余回报，或者是超出无风险回报率的回报。$R_{Mt}$是时间$t$的市场回报。而$\alpha$和$\beta$可以如下解释：
 * $\alpha$是超出市场的平均超额收益
-* $\beta$是股票相对于市场的走势。如果$\beta>0$，则股票通常和市场走势相同，当$|\beta|>1$时股票对市场反应强烈而当$|\beta|<1$时股票对市场反应较弱。
+* $\beta$是股票相对于市场的走势。如果$\beta$>0，则股票通常和市场走势相同，当|$\beta$|>1时股票对市场反应强烈而当|$\beta$|<1时股票对市场反应较弱。
 
 下面我获取了一个pandas序列，其中包含了每只股票与SPY（我们的市场估值）的相关程度。
 ```python
@@ -407,8 +407,44 @@ pandas_candlestick_ohlc(apple.loc['2016-01-04':'2016-12-31',:], otherseries = ["
 
 20天的移动均线对本地改变最敏感，200天的移动均线最不敏感。在这里，200日均线显示整体熊市：股价随着时间的推移呈下降趋势。20日均线有时看跌，其他时候看涨，预计会有积极的变化。您还可以看到移动平均线的交叉表示趋势的改变。这些交叉点可以被我们用作交易信号，或表明金融证券正在改变方向，并且可能会实现有利可图的交易。
 
-##Trading Strategy
+##交易策略
+我们现在关注的是设计和评估交易策略。
+任何交易者都必须有一套规则来确定她愿意往某只股票上投入多少钱。例如，交易者可以决定在任何情况下她都不会在交易中冒超出投资组合10％以上的风险。此外，在任何交易中，交易者必须有退出策略，即一系列条件决定她何时退出头寸，无论是盈利还是亏损。交易者可以设定目标，这是促使交易者离开头寸的最小利润。同样，交易者可能有一个她愿意承受的最大损失；如果潜在损失会超过此金额，交易者将退出该头寸以防止任何进一步的损失。我们假设在任何特定的交易中所涉及的投资组合金额是固定比例的; 10％似乎是一个很好的数字。在这里，我将演示[移动平均线交叉](http://www.investopedia.com/university/movingaverage/movingaverages4.asp)策略。我们将使用两个移动平均线，一个“快”，另一个“慢”。策略如下：
+* 当快速移动均线交叉慢速移动均线时进行交易
+* 当快速移动均线再次交叉慢速移动均线时退出交易
 
+当快速移动平均线从下往上穿过慢速移动平均线时，提示进行交易，当后来快速移动平均线向下穿过慢速移动平均线时，退出交易。
+
+我们现在有一个完整的战略。但在我们决定使用它之前，应该首先尝试评估策略的效果。这样做的通常方法是回溯测试，即测试策略对历史数据的盈利能力。例如，查看上图中Apple股票的表现，如果把20天移动平均线作为快速移动均线而50天移动平均线作为慢速移动均线，那么这种策略似乎并不是非常有利可图，至少不是如果你总是采取多头头寸。让我们看看能否自动化回溯测试。我们首先识别出20日均线何时低于50日均线，及何时高于50日均线。
+```python
+apple['20d-50d'] = apple['20d'] - apple['50d']
+apple.tail()
+```
+![图25]()
+
+我们将把这种差异的标志称为权，也就是说，如果快速移动平均线高于慢移动平均线，那么这是一个看涨政权（多头规则），当快速移动平均线低于缓慢移动平均线时，看跌政权（空头规则）成立。我使用以下代码识别权。
+```python
+# np.where() is a vectorized if-else function, where a condition is checked for each component of a vector, and the first argument passed is used when the condition holds, and the other passed if it does not
+apple["Regime"] = np.where(apple['20d-50d'] > 0, 1, 0)
+# We have 1's for bullish regimes and 0's for everything else. Below I replace bearish regimes's values with -1, and to maintain the rest of the vector, the second argument is apple["Regime"]
+apple["Regime"] = np.where(apple['20d-50d'] < 0, -1, apple["Regime"])
+apple.loc['2016-01-04':'2016-12-31',"Regime"].plot(ylim = (-2,2)).axhline(y = 0, color = "black", lw = 2)
+```
+![图26]()
+```python
+apple["Regime"].plot(ylim = (-2,2)).axhline(y = 0, color = "black", lw = 2)
+```
+![图27]()
+```python
+apple["Regime"].value_counts()
+```
+>1    1323
+-1     694
+ 0      53
+Name: Regime, dtype: int64
+
+上面的最后一行表明1005天市场对苹果利空，而600天市场看涨，54天是中性。
+change$_{t}=\log \left(\text { price }_{t}\right)-\log \left(\text { price }_{t-1}\right)$
 ##Benchmarking
 
 ##Conclusion
