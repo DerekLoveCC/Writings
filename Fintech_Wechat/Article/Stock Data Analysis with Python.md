@@ -420,9 +420,9 @@ pandas_candlestick_ohlc(apple.loc['2016-01-04':'2016-12-31',:], otherseries = ["
 apple['20d-50d'] = apple['20d'] - apple['50d']
 apple.tail()
 ```
-![图25]()
+![图25](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/25.png)
 
-我们将把这种差异的标志称为权，也就是说，如果快速移动平均线高于慢移动平均线，那么这是一个看涨政权（多头规则），当快速移动平均线低于缓慢移动平均线时，看跌政权（空头规则）成立。我使用以下代码识别权。
+我们将把这种差异的标志称为regime，也就是说，如果快速移动平均线高于慢移动平均线，那么这是一个看涨regime（多头规则），当快速移动平均线低于缓慢移动平均线时，看跌regime（空头规则）成立。我使用以下代码识别权。
 ```python
 # np.where() is a vectorized if-else function, where a condition is checked for each component of a vector, and the first argument passed is used when the condition holds, and the other passed if it does not
 apple["Regime"] = np.where(apple['20d-50d'] > 0, 1, 0)
@@ -430,11 +430,11 @@ apple["Regime"] = np.where(apple['20d-50d'] > 0, 1, 0)
 apple["Regime"] = np.where(apple['20d-50d'] < 0, -1, apple["Regime"])
 apple.loc['2016-01-04':'2016-12-31',"Regime"].plot(ylim = (-2,2)).axhline(y = 0, color = "black", lw = 2)
 ```
-![图26]()
+![图26](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/26.png)
 ```python
 apple["Regime"].plot(ylim = (-2,2)).axhline(y = 0, color = "black", lw = 2)
 ```
-![图27]()
+![图27](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/27.png)
 ```python
 apple["Regime"].value_counts()
 ```
@@ -444,7 +444,553 @@ apple["Regime"].value_counts()
 Name: Regime, dtype: int64
 
 上面的最后一行表明1005天市场对苹果利空，而600天市场看涨，54天是中性。
-change$_{t}=\log \left(\text { price }_{t}\right)-\log \left(\text { price }_{t-1}\right)$
-##Benchmarking
+交易信号出现在regime改变时。当看涨regime开始时，触发买入信号，当它结束时，触发卖出信号。同样，当看跌regime开始时，触发卖出信号，当它结束时触发买入信号（只有当你对股票做空，或者使用像股票期权这样的衍生品对赌市场时，这才有意义。）
 
-##Conclusion
+很容易获得这种信号。用$r_t$表示t时刻的regime,并用$s_t$表示t时刻的信号，那么：
+$s_t=sign(r_t-r_{t-1})$
+$s_t\in\{-1,0,1\}$ -1表示“卖出”，1表示“买入”，0表示无操作。我们可以获得如下信号：
+```python
+# To ensure that all trades close out, I temporarily change the regime of the last row to 0
+regime_orig = apple.loc[:, "Regime"].iloc[-1]
+apple.loc[:, "Regime"].iloc[-1] = 0
+apple["Signal"] = np.sign(apple["Regime"] - apple["Regime"].shift(1))
+# Restore original regime data
+apple.loc[:, "Regime"].iloc[-1] = regime_orig
+apple.tail()
+```
+![图28]()
+```python
+apple["Signal"].plot(ylim = (-2, 2))
+```
+![图29]()
+```python
+apple["Signal"].value_counts()
+```
+>0.0    2014
+-1.0     28
+1.0      27
+Name: Signal, dtype: int64
+
+我们将买入苹果股票23次，并卖出23次。如果我们只对苹果股票做多，那么在这6年期间只会进行23笔交易，相应的，如果我们在每次多头头寸结束时从多头交易转到空头头寸，我们总共将进行23笔交易。（请记住，更频繁的交易不一定是好的;交易从不是免费的。）
+
+你可能会注意到目前的系统不是很强健，因为即使是快速移动平均线一瞬间高于缓慢移动平均线也会触发交易，结果是交易快速结束（这很糟糕，因为现实中，每笔交易都伴有交易费用，能很快地冲抵掉收益）。此外，每次牛市迅速转变为熊市时，如果您构建的交易系统允许牛熊对赌，这将导致一次交易的结束立即引发新的交易，即在相反的方向下注入市场，这似乎有点吹毛求疵。一个好的系统需要更多的证据表明市场正朝着某个方向上移动。但我们暂时不去考虑这些细节。
+
+让我们试着识别出股票在每次卖出和买入时的价格。
+```python
+apple.loc[apple["Signal"] == 1, "Close"]
+```
+>Date
+2010-03-16    224.450
+2010-06-18    274.074
+2010-08-16    247.640
+2010-09-20    283.230
+2011-05-12    346.570
+2011-07-14    357.770
+2011-12-28    402.640
+2012-06-25    570.765
+2013-05-17    433.260
+2013-07-31    452.530
+2013-10-16    501.114
+2014-03-11    536.090
+2014-03-12    536.610
+2014-03-24    539.190
+2014-04-25    571.940
+2014-10-28    106.740
+2015-02-05    119.940
+2015-04-28    130.560
+2015-10-27    114.550
+2016-03-10    101.170
+2016-06-23     96.100
+2016-06-30     95.600
+2016-07-25     97.340
+2016-12-21    117.060
+2017-08-02    157.140
+2017-11-01    166.890
+2018-03-08    176.940
+Name: Close, dtype: float64
+
+```python
+apple.loc[apple["Signal"] == -1, "Close"]
+```
+>Date
+2010-06-11    253.5100
+2010-07-22    259.0240
+2010-08-17    251.9700
+2011-03-30    348.6300
+2011-03-31    348.5075
+2011-05-27    337.4100
+2011-11-17    377.4100
+2012-05-09    569.1800
+2012-10-17    644.6136
+2013-06-26    398.0700
+2013-10-04    483.0300
+2014-01-28    506.5000
+2014-03-17    526.7400
+2014-04-22    531.6990
+2014-10-17     97.6700
+2015-01-05    106.2500
+2015-04-16    126.1700
+2015-06-25    127.5000
+2015-06-26    126.7500
+2015-12-18    106.0300
+2016-05-05     93.2400
+2016-06-27     92.0400
+2016-07-11     96.9800
+2016-11-15    107.1100
+2017-06-27    143.7400
+2017-10-03    154.4800
+2018-02-06    163.0300
+2018-03-27    168.3400
+Name: Close, dtype: float64
+
+```python
+# Create a DataFrame with trades, including the price at the trade and the regime under which the trade is made.
+apple_signals = pd.concat([
+        pd.DataFrame({"Price": apple.loc[apple["Signal"] == 1, "Adj. Close"],
+                     "Regime": apple.loc[apple["Signal"] == 1, "Regime"],
+                     "Signal": "Buy"}),
+        pd.DataFrame({"Price": apple.loc[apple["Signal"] == -1, "Adj. Close"],
+                     "Regime": apple.loc[apple["Signal"] == -1, "Regime"],
+                     "Signal": "Sell"}),
+    ])
+apple_signals.sort_index(inplace = True)
+apple_signals
+```
+| Date | Price | Regime | Signal |
+|:-----------|:------------|:------------|:------------|
+|2010-03-16	 |28.844953	    |1	|Buy
+|2010-06-11	 |32.579568	    |-1	|Sell
+|2010-06-18	 |35.222329	    |1	|Buy
+|2010-07-22	 |33.288194	    |-1	|Sell
+|2010-08-16	 |31.825192	    |0	|Buy
+|2010-08-17	 |32.381657	    |-1	|Sell
+|2010-09-20	 |36.399003	    |1	|Buy
+|2011-03-30	 |44.803814	    |0	|Sell
+|2011-03-31	 |44.788071	    |-1	|Sell
+|2011-05-12	 |44.539075	    |1	|Buy
+|2011-05-27	 |43.361888	    |-1	|Sell
+|2011-07-14	 |45.978431	    |1	|Buy
+|2011-11-17	 |48.502445	    |-1	|Sell
+|2011-12-28	 |51.744852	    |1	|Buy
+|2012-05-09	 |73.147563	    |-1	|Sell
+|2012-06-25	 |73.351258	    |1	|Buy
+|2012-10-17	 |83.195498	    |-1	|Sell
+|2013-05-17	 |56.878472	    |1	|Buy
+|2013-06-26	 |52.258721	    |-1	|Sell
+|2013-07-31	 |59.408242	    |1	|Buy
+|2013-10-04	 |63.831819	    |-1	|Sell
+|2013-10-16	 |66.221597	    |1	|Buy
+|2014-01-28	 |67.325247	    |-1	|Sell
+|2014-03-11	 |71.682490	    |0	|Buy
+|2014-03-12	 |71.752021	    |1	|Buy
+|2014-03-17	 |70.432269	    |-1	|Sell
+|2014-03-24	 |72.097002	    |1	|Buy
+|2014-04-22	 |71.095354	    |-1	|Sell
+|2014-04-25	 |76.476120	    |1	|Buy
+|2014-10-17	 |92.387441	    |-1	|Sell
+|2014-10-28	 |100.966883	|1	|Buy
+|2015-01-05	 |100.937944	|-1	|Sell
+|2015-02-05	 |114.390004	|1	|Buy
+|2015-04-16	 |120.331722	|-1	|Sell
+|2015-04-28	 |124.518583	|1	|Buy
+|2015-06-25	 |122.104986	|0	|Sell
+|2015-06-26	 |121.386721	|-1	|Sell
+|2015-10-27	 |110.198438	|1	|Buy
+|2015-12-18	 |102.440744	|-1	|Sell
+|2016-03-10	 |98.271427	    |1	|Buy
+|2016-05-05	 |91.122295	    |-1	|Sell
+|2016-06-23	 |93.917337	    |1	|Buy
+|2016-06-27	 |89.949550	    |-1	|Sell
+|2016-06-30	 |93.428693	    |1	|Buy
+|2016-07-11	 |94.777350	    |-1	|Sell
+|2016-07-25	 |95.129174	    |1	|Buy
+|2016-11-15	 |105.787035	|-1	|Sell
+|2016-12-21	 |115.614138	|1	|Buy
+|2017-06-27	 |143.159139	|-1	|Sell
+|2017-08-02	 |156.504989	|1	|Buy
+|2017-10-03	 |154.480000	|-1	|Sell
+|2017-11-01	 |166.890000	|1	|Buy
+|2018-02-06	 |163.030000	|-1	|Sell
+|2018-03-08	 |176.940000	|1	|Buy
+|2018-03-27	 |168.340000	|1	|Sell
+
+```python
+# Let's see the profitability of long trades
+apple_long_profits = pd.DataFrame({
+        "Price": apple_signals.loc[(apple_signals["Signal"] == "Buy") &
+                                  apple_signals["Regime"] == 1, "Price"],
+        "Profit": pd.Series(apple_signals["Price"] - apple_signals["Price"].shift(1)).loc[
+            apple_signals.loc[(apple_signals["Signal"].shift(1) == "Buy") & (apple_signals["Regime"].shift(1) == 1)].index
+        ].tolist(),
+        "End Date": apple_signals["Price"].loc[
+            apple_signals.loc[(apple_signals["Signal"].shift(1) == "Buy") & (apple_signals["Regime"].shift(1) == 1)].index
+        ].index
+    })
+apple_long_profits
+```
+| Date | Price | Profit | End Date |
+|:------------|:------------|:------------|:------------|
+|2010-03-16	|28.844953	|3.734615	|2010-06-11
+|2010-06-18	|35.222329	|-1.934135	|2010-07-22
+|2010-09-20	|36.399003	|8.404812	|2011-03-30
+|2011-05-12	|44.539075	|-1.177188	|2011-05-27
+|2011-07-14	|45.978431	|2.524014	|2011-11-17
+|2011-12-28	|51.744852	|21.402711	|2012-05-09
+|2012-06-25	|73.351258	|9.844240	|2012-10-17
+|2013-05-17	|56.878472	|-4.619751	|2013-06-26
+|2013-07-31	|59.408242	|4.423577	|2013-10-04
+|2013-10-16	|66.221597	|1.103650	|2014-01-28
+|2014-03-12	|71.752021	|-1.319753	|2014-03-17
+|2014-03-24	|72.097002	|-1.001648	|2014-04-22
+|2014-04-25	|76.476120	|15.911321	|2014-10-17
+|2014-10-28	|100.966883	|-0.028939	|2015-01-05
+|2015-02-05	|114.390004	|5.941719	|2015-04-16
+|2015-04-28	|124.518583	|-2.413598	|2015-06-25
+|2015-10-27	|110.198438	|-7.757693	|2015-12-18
+|2016-03-10	|98.271427	|-7.149132	|2016-05-05
+|2016-06-23	|93.917337	|-3.967788	|2016-06-27
+|2016-06-30	|93.428693	|1.348657	|2016-07-11
+|2016-07-25	|95.129174	|10.657861	|2016-11-15
+|2016-12-21	|115.614138	|27.545001	|2017-06-27
+|2017-08-02	|156.504989	|-2.024989	|2017-10-03
+|2017-11-01	|166.890000	|-3.860000	|2018-02-06
+|2018-03-08	|176.940000	|-8.600000	|2018-03-27
+现在让我们创建一个1,000,000美元的模拟投资组合，并根据我们的规则看看它的表现如何。这包括：
+* 在任何交易中只投入投资组合的10%
+* 如果损失超过交易价值的20％，则退出该头寸。
+
+在模拟时，请记住下面这些：
+* 交易是按照每次100股批量交易的
+* 我们的止损规则涉及在价格跌至指定水平以下时下单卖出股票，因此，我们需要检查在此期间的低点是否足够低以触发止损。实际上，除非我们买入认沽期权，否则我们无法保证我们将按照止损设定的价格出售股票，但无论如何为了简单起见，我们都会以此为卖价。
+* 每笔交易都需要给经纪人佣金，应该对其进行核算。这里我们不作考虑。
+
+以下是回溯测试：
+```python
+# We need to get the low of the price during each trade.
+tradeperiods = pd.DataFrame({"Start": apple_long_profits.index,
+                            "End": apple_long_profits["End Date"]})
+apple_long_profits["Low"] = tradeperiods.apply(lambda x: min(apple.loc[x["Start"]:x["End"], "Adj. Low"]), axis = 1)
+apple_long_profits
+```
+| Date | Price | Profit | End Date | Low |
+|:-----------|:------------|:------------|:------------|:------------|
+|2010-03-16	|28.844953	|3.734615	|2010-06-11	|25.606402
+|2010-06-18	|35.222329	|-1.934135	|2010-07-22	|30.791939
+|2010-09-20	|36.399003	|8.404812	|2011-03-30	|35.341333
+|2011-05-12	|44.539075	|-1.177188	|2011-05-27	|42.335061
+|2011-07-14	|45.978431	|2.524014	|2011-11-17	|45.367990
+|2011-12-28	|51.744852	|21.402711	|2012-05-09	|51.471117
+|2012-06-25	|73.351258	|9.844240	|2012-10-17	|72.688768
+|2013-05-17	|56.878472	|-4.619751	|2013-06-26	|51.942335
+|2013-07-31	|59.408242	|4.423577	|2013-10-04	|59.001273
+|2013-10-16	|66.221597	|1.103650	|2014-01-28	|65.972629
+|2014-03-12	|71.752021	|-1.319753	|2014-03-17	|69.932180
+|2014-03-24	|72.097002	|-1.001648	|2014-04-22	|68.371743
+|2014-04-25	|76.476120	|15.911321	|2014-10-17	|75.409086
+|2014-10-28	|100.966883 |-0.028939	|2015-01-05	|99.652062
+|2015-02-05	|114.390004 |5.941719	|2015-04-16	|112.949876
+|2015-04-28	|124.518583 |-2.413598	|2015-06-25	|117.651750
+|2015-10-27	|110.198438 |-7.757693	|2015-12-18	|102.228192
+|2016-03-10	|98.271427	|-7.149132	|2016-05-05	|89.752692
+|2016-06-23	|93.917337	|-3.967788	|2016-06-27	|89.421814
+|2016-06-30	|93.428693	|1.348657	|2016-07-11	|92.158220
+|2016-07-25	|95.129174	|10.657861	|2016-11-15	|94.230069
+|2016-12-21	|115.614138 |27.545001	|2017-06-27	|113.342546
+|2017-08-02	|156.504989 |-2.024989	|2017-10-03	|149.160000
+|2017-11-01	|166.890000 |-3.860000	|2018-02-06	|154.000000
+|2018-03-08	|176.940000 |-8.600000	|2018-03-27	|164.940000
+
+```python
+# Now we have all the information needed to simulate this strategy in apple_adj_long_profits
+cash = 1000000
+apple_backtest = pd.DataFrame({"Start Port. Value": [],
+                         "End Port. Value": [],
+                         "End Date": [],
+                         "Shares": [],
+                         "Share Price": [],
+                         "Trade Value": [],
+                         "Profit per Share": [],
+                         "Total Profit": [],
+                         "Stop-Loss Triggered": []})
+port_value = .1  # Max proportion of portfolio bet on any trade
+batch = 100      # Number of shares bought per batch
+stoploss = .2    # % of trade loss that would trigger a stoploss
+for index, row in apple_long_profits.iterrows():
+    batches = np.floor(cash * port_value) // np.ceil(batch * row["Price"]) # Maximum number of batches of stocks invested in
+    trade_val = batches * batch * row["Price"] # How much money is put on the line with each trade
+    if row["Low"] < (1 - stoploss) * row["Price"]:   # Account for the stop-loss
+        share_profit = np.round((1 - stoploss) * row["Price"], 2)
+        stop_trig = True
+    else:
+        share_profit = row["Profit"]
+        stop_trig = False
+    profit = share_profit * batches * batch # Compute profits
+    # Add a row to the backtest data frame containing the results of the trade
+    apple_backtest = apple_backtest.append(pd.DataFrame({
+                "Start Port. Value": cash,
+                "End Port. Value": cash + profit,
+                "End Date": row["End Date"],
+                "Shares": batch * batches,
+                "Share Price": row["Price"],
+                "Trade Value": trade_val,
+                "Profit per Share": share_profit,
+                "Total Profit": profit,
+                "Stop-Loss Triggered": stop_trig
+            }, index = [index]))
+    cash = max(0, cash + profit)
+ 
+apple_backtest
+```
+
+|Start Port. Value	|End Port. Value	|End Date	|Shares	|Share Price	|Trade Value	|Profit per Share	|Total Profit	|Stop-Loss Triggered|
+|------------|------------|------------|------------|------------|------------|------------|------------|------------|
+|2010-03-16	 |1.000000e+06	|1.012698e+06	|2010-06-11	 |3400.0	|28.844953	 |98072.841239	 |3.734615	|12697.691096 |	0.0
+|2010-06-18	 |1.012698e+06	|1.007282e+06	|2010-07-22	 |2800.0	|35.222329	 |98622.521053	 |-1.934135	|-5415.577333 |	0.0
+|2010-09-20	 |1.007282e+06	|1.029975e+06	|2011-03-30	 |2700.0	|36.399003	 |98277.306914	 |8.404812	|22692.991110 |	0.0
+|2011-05-12	 |1.029975e+06	|1.027268e+06	|2011-05-27	 |2300.0	|44.539075	 |102439.873355  |-1.177188	|-2707.531638 |	0.0
+|2011-07-14	 |1.027268e+06	|1.032820e+06	|2011-11-17	 |2200.0	|45.978431	 |101152.549241  |2.524014	|5552.830218  | 0.0
+|2011-12-28	 |1.032820e+06	|1.073486e+06	|2012-05-09	 |1900.0	|51.744852	 |98315.218526	 |21.402711	|40665.151235 |	0.0
+|2012-06-25	 |1.073486e+06	|1.087267e+06	|2012-10-17	 |1400.0	|73.351258	 |102691.760672  |9.844240	|13781.935982 |	0.0
+|2013-05-17	 |1.087267e+06	|1.078490e+06	|2013-06-26	 |1900.0	|56.878472	 |108069.096937  |-4.619751	|-8777.527400 |	0.0
+|2013-07-31	 |1.078490e+06	|1.086452e+06	|2013-10-04	 |1800.0	|59.408242	 |106934.835757  |4.423577	|7962.438409  | 0.0
+|2013-10-16	 |1.086452e+06	|1.088218e+06	|2014-01-28	 |1600.0	|66.221597	 |105954.555657  |1.103650	|1765.839598  | 0.0
+|2014-03-12	 |1.088218e+06	|1.086239e+06	|2014-03-17	 |1500.0	|71.752021	 |107628.031714  |-1.319753	|-1979.628917 |	0.0
+|2014-03-24	 |1.086239e+06	|1.084736e+06	|2014-04-22	 |1500.0	|72.097002	 |108145.503103  |-1.001648	|-1502.472160 |	0.0
+|2014-04-25	 |1.084736e+06	|1.107012e+06	|2014-10-17	 |1400.0	|76.476120	 |107066.568572  |15.911321	|22275.849051 |	0.0
+|2014-10-28	 |1.107012e+06	|1.106983e+06	|2015-01-05	 |1000.0	|100.966883	 |100966.883069  |-0.028939	|-28.938709	  | 0.0
+|2015-02-05	 |1.106983e+06	|1.112331e+06	|2015-04-16	 |900.0	    |114.390004	 |102951.003221  |5.941719	|5347.546691  | 0.0
+|2015-04-28	 |1.112331e+06	|1.110400e+06	|2015-06-25	 |800.0	    |124.518583	 |99614.866549	 |-2.413598	|-1930.878038 |	0.0
+|2015-10-27	 |1.110400e+06	|1.102642e+06	|2015-12-18	 |1000.0	|110.198438	 |110198.437846  |-7.757693	|-7757.693367 |	0.0
+|2016-03-10	 |1.102642e+06	|1.094778e+06	|2016-05-05	 |1100.0	|98.271427	 |108098.569555  |-7.149132	|-7864.045388 |	0.0
+|2016-06-23	 |1.094778e+06	|1.090413e+06	|2016-06-27	 |1100.0	|93.917337	 |103309.070918  |-3.967788	|-4364.566368 |	0.0
+|2016-06-30	 |1.090413e+06	|1.091897e+06	|2016-07-11	 |1100.0	|93.428693	 |102771.562745  |1.348657	|1483.522558  | 0.0
+|2016-07-25	 |1.091897e+06	|1.103621e+06	|2016-11-15	 |1100.0	|95.129174	 |104642.091188  |10.657861	|11723.647322 |	0.0
+|2016-12-21	 |1.103621e+06	|1.128411e+06	|2017-06-27	 |900.0	    |115.614138	 |104052.724175  |27.545001	|24790.501098 |	0.0
+|2017-08-02	 |1.128411e+06	|1.126994e+06	|2017-10-03	 |700.0	    |156.504989	 |109553.492367  |-2.024989	|-1417.492367 |	0.0
+|2017-11-01	 |1.126994e+06	|1.124678e+06	|2018-02-06	 |600.0	    |166.890000	 |100134.000000  |-3.860000	|-2316.000000 |	0.0
+|2018-03-08	 |1.124678e+06	|1.119518e+06	|2018-03-27	 |600.0	    |176.940000	 |106164.000000  |-8.600000	|-5160.000000 |	0.0
+
+```python
+apple_backtest["End Port. Value"].plot()
+```
+![图30]()
+我们的投资组合价值在六年内增长了13％。考虑到每次交易只使用了投资组合的10%，这个收益还不错。
+
+请注意，这个策略从未触发我们的这条规则：永远不允许损失超过所交易价值的20％。为简单起见，我们将在回测中忽略此规则。更现实的投资组合不会将其价值的10％只押在一只股票上。一个更现实的投资组合会考虑投资多种股票。在任何给定的时刻，涉及多个公司的多个交易可能在进行，而且大部分投资组合都是股票，而不是现金。现在我们将投资多只股票并且仅在移动平均线交叉时退出（不是因为止损），我们需要改变我们回溯测试的方法。例如，我们将使用一个pandas DataFrame来包含所有要考虑股票的所有买卖订单，我们上面的循环必须跟踪更多信息。
+
+我编写了用于创建多个股票的订单数据的函数，以及用于执行回测的函数。
+```python
+def ma_crossover_orders(stocks, fast, slow):
+    """
+    :param stocks: A list of tuples, the first argument in each tuple being a string containing the ticker symbol of each stock (or however you want the stock represented, so long as it's unique), and the second being a pandas DataFrame containing the stocks, with a "Close" column and indexing by date (like the data frames returned by the Yahoo! Finance API)
+    :param fast: Integer for the number of days used in the fast moving average
+    :param slow: Integer for the number of days used in the slow moving average
+ 
+    :return: pandas DataFrame containing stock orders
+ 
+    This function takes a list of stocks and determines when each stock would be bought or sold depending on a moving average crossover strategy, returning a data frame with information about when the stocks in the portfolio are bought or sold according to the strategy
+    """
+    fast_str = str(fast) + 'd'
+    slow_str = str(slow) + 'd'
+    ma_diff_str = fast_str + '-' + slow_str
+ 
+    trades = pd.DataFrame({"Price": [], "Regime": [], "Signal": []})
+    for s in stocks:
+        # Get the moving averages, both fast and slow, along with the difference in the moving averages
+        s[1][fast_str] = np.round(s[1]["Close"].rolling(window = fast, center = False).mean(), 2)
+        s[1][slow_str] = np.round(s[1]["Close"].rolling(window = slow, center = False).mean(), 2)
+        s[1][ma_diff_str] = s[1][fast_str] - s[1][slow_str]
+ 
+        # np.where() is a vectorized if-else function, where a condition is checked for each component of a vector, and the first argument passed is used when the condition holds, and the other passed if it does not
+        s[1]["Regime"] = np.where(s[1][ma_diff_str] > 0, 1, 0)
+        # We have 1's for bullish regimes and 0's for everything else. Below I replace bearish regimes's values with -1, and to maintain the rest of the vector, the second argument is apple["Regime"]
+        s[1]["Regime"] = np.where(s[1][ma_diff_str] < 0, -1, s[1]["Regime"])
+        # To ensure that all trades close out, I temporarily change the regime of the last row to 0
+        regime_orig = s[1].loc[:, "Regime"].iloc[-1]
+        s[1].loc[:, "Regime"].iloc[-1] = 0
+        s[1]["Signal"] = np.sign(s[1]["Regime"] - s[1]["Regime"].shift(1))
+        # Restore original regime data
+        s[1].loc[:, "Regime"].iloc[-1] = regime_orig
+ 
+        # Get signals
+        signals = pd.concat([
+            pd.DataFrame({"Price": s[1].loc[s[1]["Signal"] == 1, "Adj. Close"],
+                         "Regime": s[1].loc[s[1]["Signal"] == 1, "Regime"],
+                         "Signal": "Buy"}),
+            pd.DataFrame({"Price": s[1].loc[s[1]["Signal"] == -1, "Adj. Close"],
+                         "Regime": s[1].loc[s[1]["Signal"] == -1, "Regime"],
+                         "Signal": "Sell"}),
+        ])
+        signals.index = pd.MultiIndex.from_product([signals.index, [s[0]]], names = ["Date", "Symbol"])
+        trades = trades.append(signals)
+ 
+    trades.sort_index(inplace = True)
+    trades.index = pd.MultiIndex.from_tuples(trades.index, names = ["Date", "Symbol"])
+ 
+    return trades
+ 
+ 
+def backtest(signals, cash, port_value = .1, batch = 100):
+    """
+    :param signals: pandas DataFrame containing buy and sell signals with stock prices and symbols, like that returned by ma_crossover_orders
+    :param cash: integer for starting cash value
+    :param port_value: maximum proportion of portfolio to risk on any single trade
+    :param batch: Trading batch sizes
+ 
+    :return: pandas DataFrame with backtesting results
+ 
+    This function backtests strategies, with the signals generated by the strategies being passed in the signals DataFrame. A fictitious portfolio is simulated and the returns generated by this portfolio are reported.
+    """
+ 
+    SYMBOL = 1 # Constant for which element in index represents symbol
+    portfolio = dict()    # Will contain how many stocks are in the portfolio for a given symbol
+    port_prices = dict()  # Tracks old trade prices for determining profits
+    # Dataframe that will contain backtesting report
+    results = pd.DataFrame({"Start Cash": [],
+                            "End Cash": [],
+                            "Portfolio Value": [],
+                            "Type": [],
+                            "Shares": [],
+                            "Share Price": [],
+                            "Trade Value": [],
+                            "Profit per Share": [],
+                            "Total Profit": []})
+ 
+    for index, row in signals.iterrows():
+        # These first few lines are done for any trade
+        shares = portfolio.setdefault(index[SYMBOL], 0)
+        trade_val = 0
+        batches = 0
+        cash_change = row["Price"] * shares   # Shares could potentially be a positive or negative number (cash_change will be added in the end; negative shares indicate a short)
+        portfolio[index[SYMBOL]] = 0  # For a given symbol, a position is effectively cleared
+ 
+        old_price = port_prices.setdefault(index[SYMBOL], row["Price"])
+        portfolio_val = 0
+        for key, val in portfolio.items():
+            portfolio_val += val * port_prices[key]
+ 
+        if row["Signal"] == "Buy" and row["Regime"] == 1:  # Entering a long position
+            batches = np.floor((portfolio_val + cash) * port_value) // np.ceil(batch * row["Price"]) # Maximum number of batches of stocks invested in
+            trade_val = batches * batch * row["Price"] # How much money is put on the line with each trade
+            cash_change -= trade_val  # We are buying shares so cash will go down
+            portfolio[index[SYMBOL]] = batches * batch  # Recording how many shares are currently invested in the stock
+            port_prices[index[SYMBOL]] = row["Price"]   # Record price
+            old_price = row["Price"]
+        elif row["Signal"] == "Sell" and row["Regime"] == -1: # Entering a short
+            pass
+            # Do nothing; can we provide a method for shorting the market?
+        #else:
+            #raise ValueError("I don't know what to do with signal " + row["Signal"])
+ 
+        pprofit = row["Price"] - old_price   # Compute profit per share; old_price is set in such a way that entering a position results in a profit of zero
+ 
+        # Update report
+        results = results.append(pd.DataFrame({
+                "Start Cash": cash,
+                "End Cash": cash + cash_change,
+                "Portfolio Value": cash + cash_change + portfolio_val + trade_val,
+                "Type": row["Signal"],
+                "Shares": batch * batches,
+                "Share Price": row["Price"],
+                "Trade Value": abs(cash_change),
+                "Profit per Share": pprofit,
+                "Total Profit": batches * batch * pprofit
+            }, index = [index]))
+        cash += cash_change  # Final change to cash balance
+ 
+    results.sort_index(inplace = True)
+    results.index = pd.MultiIndex.from_tuples(results.index, names = ["Date", "Symbol"])
+ 
+    return results
+ 
+# Get more stocks
+(microsoft, google, facebook, twitter, netflix,
+amazon, yahoo, ge, qualcomm, ibm, hp) = (quandl.get("WIKI/" + s, start_date=start,
+                                                                         end_date=end) for s in ["MSFT", "GOOG", "FB", "TWTR",
+                                                                                                 "NFLX", "AMZN", "YHOO", "GE",
+                                                                                                 "QCOM", "IBM", "HPQ"])
+```
+```python
+signals = ma_crossover_orders([("AAPL", apple),
+                              ("MSFT",  microsoft),
+                              ("GOOG",  google),
+                              ("FB",    facebook),
+                              ("TWTR",  twitter),
+                              ("NFLX",  netflix),
+                              ("AMZN",  amazon),
+                              ("YHOO",  yahoo),
+                              ("GE",    ge),
+                              ("QCOM",  qualcomm),
+                              ("IBM",   ibm),
+                              ("HPQ",   hp)],
+                            fast = 20, slow = 50)
+signals
+```
+![图31]()
+
+```python
+bk = backtest(signals, 1000000)
+bk
+```
+![图32]()
+
+```python
+bk["Portfolio Value"].groupby(level = 0).apply(lambda x: x[-1]).plot()
+```
+![图33]()
+
+一个更现实的投资组合可以投资于12只（科技股）股票中的任何一个，最终增长率约为100％。这有多好呢？虽然表面上还不错，但我们会看到我们可以做得更好。
+##基准策略
+回归测试仅是评估交易策略效果的一部分。我们希望对策略进行基准测试，或者将其与其他可用（通常是众所周知的）策略进行比较，以确定我们做的有多好。
+
+无论何时评估一个交易系统，有一个策略你都应该检查，此策略超过了除少数有管理的共同基金和投资经理之外的所有策略：购买并持有[SPY](https://finance.yahoo.com/quote/SPY)。有效市场假说认为，任何人都不可能击败市场。因此，应该总是购买仅反映市场构成的指数基金。通过购买和持有SPY，我们可以有效地试图将我们的回报与市场相匹配而不是击败它。
+
+我只看购买和持有SPY的利润。
+```python
+#spyder = web.DataReader("SPY", "yahoo", start, end)
+spyder = spyderdat.loc[start:end]
+spyder.iloc[[0,-1],:]
+```
+|date|Open	|High	|Low	|Close	|Adj Close|
+|------------|------------|------------|------------|------------|------------|					
+|2015-06-01	|211.94	|212.34	|210.620 |211.57 |211.57
+|2019-05-30	|279.11	|280.04	|277.805 |279.03 |279.03
+
+```python
+batches = 1000000 // np.ceil(100 * spyder.loc[:,"Adj Close"].iloc[0]) # Maximum number of batches of stocks invested in
+trade_val = batches * batch * spyder.loc[:,"Adj Close"].iloc[0] # How much money is used to buy SPY
+final_val = batches * batch * spyder.loc[:,"Adj Close"].iloc[-1] + (1000000 - trade_val) # Final value of the portfolio
+final_val
+```
+>1317061.9999999998
+```python
+# We see that the buy-and-hold strategy beats the strategy we developed earlier. I would also like to see a plot.
+ax_bench = (spyder["Adj Close"] / spyder.loc[:, "Adj Close"].iloc[0]).plot(label = "SPY")
+ax_bench = (bk["Portfolio Value"].groupby(level = 0).apply(lambda x: x[-1]) / 1000000).plot(ax = ax_bench, label = "Portfolio")
+ax_bench.legend(ax_bench.get_lines(), [l.get_label() for l in ax_bench.get_lines()], loc = 'best')
+ax_bench
+```
+![图34]()
+购买和持有SPY的效益与我们的交易系统基本一样，至少根据我们目前的如何设置是这样，我们甚至还没有考虑到我们这个更复杂的策略在费用方面的成本。鉴于机会成本以及主动策略相关的费用，我们不应该采用它。
+
+我们能做些什么来改善我们系统的性能呢？对于初学者，我们可以尝试多样化。我们考虑的所有股票都是科技公司，这意味着如果科技行业表现不佳，我们的投资组合将反映出这一点。我们可以尝试开发一个也可以卖空股票或做跌的系统，这样我们就可以利用任何方向的趋势了。我们可以寻找预测股票会达到多高的方式。但是，无论我们做什么，都必须超过这个基准;否则我们的交易系统会有机会成本。
+
+还存在其他的基准策略，如果我们的交易系统超越了“买入并持有SPY”这一策略，我们可以跟他们做比较。这些策略包括：
+* 当其月收盘价高于其十个月移动均线时，买入SPY
+* 当其十个月的动量为正时，买入SPY。（动量是移动平均过程的第一个区别，或者$MO_t^q = MA_t^q-MA_{t-1}^q$.）
+
+(我在[这里](https://www.r-bloggers.com/are-r2s-useful-in-finance-hypothesis-driven-development-in-reverse/?utm_source=feedburner&utm_medium=email&utm_campaign=Feed%3A+RBloggers+%28R+bloggers%29)第一次阅读了这些策略。)通用的教训仍然有效:不要使用一个带有大量活跃交易的复杂交易系统，如果一个使用了指数基金且不需要频繁交易的简单策略就能超越它。[这实际上是一个非常难以满足的要求。](http://www.nytimes.com/2015/03/15/your-money/how-many-mutual-funds-routinely-rout-the-market-zero.html?_r=0)
+
+最后一点，假设你的交易系统确实设法超越了所有在回归测试中给它的基准策略。那回归测试能预测将来的收益么？根本不能。[回归测试具有过度拟合的倾向](http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2745220)，所以，回测预测高增长并不意味着未来增长可以持续。有针对过度拟合的策略，例如做[前瞻性分析](https://ntguardian.wordpress.com/2017/06/19/walk-forward-analysis-demonstration-backtrader/)并将数据集的一部分（可能是最新的部分）作为最终测试集来确定策略是否盈利，然后再使用“sitting on”策略，通过这两个过滤器仍能存活的策略，再看它在当前的市场中是否仍能盈利。
+##总结
+虽然这个课程以一个令人沮丧的说明结束，但请记住，[有效市场假说也有许多批评者](http://www.nytimes.com/2009/06/06/business/06nocera.html)。我自己的观点是，随着交易变得更加算法化，击败市场将变得更加困难。也就是说，还是有可能击败市场的，尽管共同基金似乎无法做到这一点（但请记住，共同基金表现如此糟糕的部分原因是因为费用，这不是指数基金所担心的）。
+
+本课程非常简短，仅涵盖一种策略：基于移动平均线的策略。还有许多其他被使用的交易策略。此外，我们从未深入讨论做空股票，货币交易或股票期权。特别的，股票期权是一个丰富的课题，它提供了许多不同的方式来押注股票的趋势方向。您可以在使用Python的衍生品分析一书中阅读更多关于衍生品（包括股票期权和其他衍生品）的信息：数据分析，模型，模拟，校准和套期保值，[可以从犹他大学图书馆获得这本书](http://proquest.safaribooksonline.com.ezproxy.lib.utah.edu/9781119037996)。
+
+另一种资源（我在撰写本课程时把它作为参考资料）是O'Reilly的Python for Finance一书，[也可以从犹他大学图书馆获得。](http://proquest.safaribooksonline.com.ezproxy.lib.utah.edu/book/programming/python/9781491945360)
+
+如果您对研究算法交易感兴趣，那么您将从何处开始？我不建议使用我上面编写的代码进行回溯测试；对于这个任务，有更好的工具包。python有一些用于算法交易的库，例如[pyfolio](https://quantopian.github.io/pyfolio/)（用于分析），[zipline](http://www.zipline.io/beginner-tutorial.html)（用于回测和算法交易），以及[backtrader](https://www.backtrader.com/)（也用于回测和交易）。zipline似乎很受欢迎，因为它是由[quantopian](https://www.quantopian.com/)使用和开发的，这是一个“众包对冲基金”，允许用户使用他们的数据进行回溯测试,甚至在给他们一些利润的情况下，可以从他们的作者那里获得可获利的策略许可。但是，我更喜欢backtrader并撰写了有关使用它的[博客文章](https://ntguardian.wordpress.com/tag/backtrader/)。两者比较，它可能更复杂，但这是更强大功能的代价。我是它的设计的粉丝。我也建议学习R，因为它有许多用于分析财务数据的软件包（比Python更多），并且在Python中使用R函数非常容易（正如我在[这篇文章](https://ntguardian.wordpress.com/2017/06/28/stock-trading-analytics-and-optimization-in-python-with-pyfolio-rs-performanceanalytics-and-backtrader/)中所展示的那样）。
+
+您可以在我的[博客](https://ntguardian.wordpress.com/category/economics-and-finance/)上阅读有关在金融中使用R和Python的更多信息。
+
+请记住，有可能（如果不常见）在股票市场上赔钱。虽然很难找到像股票那样的回报，但任何投资策略都应该认真对待投资。本课程旨在为评估股票交易和投资提供一个起点，更一般地说，分析时态数据，我希望您能继续探索这些思想。
