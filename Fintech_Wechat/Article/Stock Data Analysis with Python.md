@@ -458,11 +458,11 @@ apple["Signal"] = np.sign(apple["Regime"] - apple["Regime"].shift(1))
 apple.loc[:, "Regime"].iloc[-1] = regime_orig
 apple.tail()
 ```
-![图28]()
+![图28](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/28.png)
 ```python
 apple["Signal"].plot(ylim = (-2, 2))
 ```
-![图29]()
+![图29](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/29.png)
 ```python
 apple["Signal"].value_counts()
 ```
@@ -773,7 +773,7 @@ apple_backtest
 ```python
 apple_backtest["End Port. Value"].plot()
 ```
-![图30]()
+![图30](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/30.png)
 我们的投资组合价值在六年内增长了13％。考虑到每次交易只使用了投资组合的10%，这个收益还不错。
 
 请注意，这个策略从未触发我们的这条规则：永远不允许损失超过所交易价值的20％。为简单起见，我们将在回测中忽略此规则。更现实的投资组合不会将其价值的10％只押在一只股票上。一个更现实的投资组合会考虑投资多种股票。在任何给定的时刻，涉及多个公司的多个交易可能在进行，而且大部分投资组合都是股票，而不是现金。现在我们将投资多只股票并且仅在移动平均线交叉时退出（不是因为止损），我们需要改变我们回溯测试的方法。例如，我们将使用一个pandas DataFrame来包含所有要考虑股票的所有买卖订单，我们上面的循环必须跟踪更多信息。
@@ -926,18 +926,18 @@ signals = ma_crossover_orders([("AAPL", apple),
                             fast = 20, slow = 50)
 signals
 ```
-![图31]()
+![图31](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/31.png)
 
 ```python
 bk = backtest(signals, 1000000)
 bk
 ```
-![图32]()
+![图32](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/32.png)
 
 ```python
 bk["Portfolio Value"].groupby(level = 0).apply(lambda x: x[-1]).plot()
 ```
-![图33]()
+![图33](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/33.png)
 
 一个更现实的投资组合可以投资于12只（科技股）股票中的任何一个，最终增长率约为100％。这有多好呢？虽然表面上还不错，但我们会看到我们可以做得更好。
 ##基准策略
@@ -970,7 +970,7 @@ ax_bench = (bk["Portfolio Value"].groupby(level = 0).apply(lambda x: x[-1]) / 10
 ax_bench.legend(ax_bench.get_lines(), [l.get_label() for l in ax_bench.get_lines()], loc = 'best')
 ax_bench
 ```
-![图34]()
+![图34](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/Stock%20Data%20Analysis%20with%20Python/34.png)
 购买和持有SPY的效益与我们的交易系统基本一样，至少根据我们目前的如何设置是这样，我们甚至还没有考虑到我们这个更复杂的策略在费用方面的成本。鉴于机会成本以及主动策略相关的费用，我们不应该采用它。
 
 我们能做些什么来改善我们系统的性能呢？对于初学者，我们可以尝试多样化。我们考虑的所有股票都是科技公司，这意味着如果科技行业表现不佳，我们的投资组合将反映出这一点。我们可以尝试开发一个也可以卖空股票或做跌的系统，这样我们就可以利用任何方向的趋势了。我们可以寻找预测股票会达到多高的方式。但是，无论我们做什么，都必须超过这个基准;否则我们的交易系统会有机会成本。
