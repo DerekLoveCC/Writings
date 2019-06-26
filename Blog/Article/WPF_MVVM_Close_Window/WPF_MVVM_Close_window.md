@@ -28,3 +28,5 @@
 ```
 >在使用时，只需要把这个属性Attach到相关窗口上并Binding到后台ViewModel的属性上，下面是一个例子，完整的例子请参见https://github.com/DerekLoveCC/Writings/tree/master/Blog/Code/AStockViewer：
 
+![图1](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/WPF_MVVM_Close_Window/wpf_mvmv_dialog_close_1.png)
+![图2](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/WPF_MVVM_Close_Window/wpf_mvmv_dialog_close_2.png)
