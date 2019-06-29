@@ -1,5 +1,5 @@
 ###问题
->通过传统的方式监听事件（即通过C#的+=语法），有可能会导致内存泄漏，原因是事件源会保持对事>件Handler所在对象的强引用从而阻碍GC回收它，这样事件handler对象的生命周期收到了事件源对象的影响。
+>通过传统的方式监听事件（即C#的+=语法），有可能会导致内存泄漏，原因是事件源会持有对事件Handler所在对象的强引用从而阻碍GC回收它，这样事件handler对象的生命周期受到了事件源对象的影响。
 ###解决方案
 >此问题有两个解决办法：1) 确保通过-=语法反注册事件处理器 2)使用弱事件模式（Weak Event Pattern）。本文主要讲解Weak Event Pattern。
 
@@ -12,7 +12,7 @@ bool ReceiveWeakEvent (Type managerType, object sender, EventArgs e);
 >2. 使用泛型类WeakEventManager<EventSource, SomeEventEventArgs>
 >3. 自己编写Event Manager
 
->首先我们通过如下代码来看看传统的事件注册方式有什么问题，代码里通过+=语法注册了listener.HandleEvent方法到eventSource.CustomEvent事件上，在设置listener为null后并触发GC，但listener对象并不会被GC收集且会继续处理新的消息,图一是其运行结果。
+>首先我们通过如下代码来看看传统的事件注册方式有什么问题，代码通过+=语法把listener.HandleEvent方法注册到了eventSource.CustomEvent事件上，在设置listener为null后并触发GC，但listener对象并不会被GC收集且会继续处理新的消息,图一是其运行结果。
 ```C#
     public static class ProblemInNormalRegister
     {
@@ -40,11 +40,11 @@ bool ReceiveWeakEvent (Type managerType, object sender, EventArgs e);
         }
     }
 ```
-![图一]()
->接下来，让我们通过3种不同的方式应用Weak Event Pattern来解决这个问题。
+![图一](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/Weak_Event_Pattern/weak_event_pattern_normal_way.png)
+>接下来，让我们通过3种不同的方式来应用Weak Event Pattern来解决这个问题。
 
 >1. 使用.Net Framework自带的Event Manager
-系统自带了一些像CollectionChangedEventManager，PropertyChangedEventManager的Weak Event Manager，每个事件管理器只处理一类事件，比如PropertyChangedEventManager是处理INotifyPropertyChanged.PropertyChanged事件的，完整列表请参考:https://docs.microsoft.com/en-us/dotnet/api/system.windows.weakeventmanager?view=netframework-4.8。 如果你要处理的事件恰好对应某个系统自带的Event Manager，那么你可以直接按照如下的方法拿来使用，其运行结果如图二所示，可以看到listener在被设置成null之后被回收了，从而也就不能在处理新的消息了
+系统自带了一些像CollectionChangedEventManager，PropertyChangedEventManager的Weak Event Manager，每个事件管理器只处理一类事件，比如PropertyChangedEventManager是处理INotifyPropertyChanged.PropertyChanged事件的，完整列表请参考:https://docs.microsoft.com/en-us/dotnet/api/system.windows.weakeventmanager?view=netframework-4.8。 如果你要处理的事件恰好对应某个系统自带的Event Manager，那么你可以直接按照如下的方法拿来使用，其运行结果如图二所示，可以看到listener在被设置成null之后被回收了，从而也就不能再处理新的消息了
 ```C#
     public class UseExistingWeakEventManager_PropertyChangedEventManager
     {
@@ -72,7 +72,7 @@ bool ReceiveWeakEvent (Type managerType, object sender, EventArgs e);
         }
     }
 ```
-![图二]()
+![图二](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/Weak_Event_Pattern/using_existing_event_manager.png)
 
 >2. 使用泛型类WeakEventManager<EventSource, SomeEventEventArgs>
 按照如下代码使用.net framework的泛型类WeakEventManager，非常方便而且listener在设置为null之后可以被回收，运行结果如图三所示。
@@ -103,10 +103,11 @@ bool ReceiveWeakEvent (Type managerType, object sender, EventArgs e);
         }
     }
 ```
-![图三]()
+![图三](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/Weak_Event_Pattern/generic_weak_event_manager.png)
 
 >3. 自己编写Event Manager
-首先，创建一个类如CustomizedWeakEventManager并继承自WeakEventManager，然后重写基类WeakEventManager中的StartListening和StopListening函数；此外CustomizedWeakEventManager也提供了AddListener和RemoveListener函数类方便添加和移除监听器，类的代码如下：
+
+首先，创建一个类如CustomizedWeakEventManager并继承自WeakEventManager，然后重写基类WeakEventManager中的StartListening和StopListening函数；此外CustomizedWeakEventManager也提供了AddListener和RemoveListener函数来方便添加和移除监听器，类的代码如下：
 ```C#
     public class CustomizedWeakEventManager : WeakEventManager
     {
@@ -149,7 +150,9 @@ bool ReceiveWeakEvent (Type managerType, object sender, EventArgs e);
     }
 ```
 程序执行结果如下图:
-![图四]()
+![图四](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/Weak_Event_Pattern/customized_weakEventManager.png)和直接使用泛型类相比，自定义Event Manager性能要好一些。
+
+完整的程序请参考：https://github.com/DerekLoveCC/Writings/blob/master/Blog/Code/AStockViewer/WeakEventPattern/WeakEventPattern.csproj
 
 ####其他资源
 1. https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/weak-event-patterns
