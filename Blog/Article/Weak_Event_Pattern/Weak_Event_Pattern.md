@@ -75,7 +75,7 @@ bool ReceiveWeakEvent (Type managerType, object sender, EventArgs e);
 ![图二]()
 
 >2. 使用泛型类WeakEventManager<EventSource, SomeEventEventArgs>
-按照如下代码使用.net framework的泛型WeakEventManager，非常方便而且listener在设置为null之后可以被回收，运行结果如图三所示。
+按照如下代码使用.net framework的泛型类WeakEventManager，非常方便而且listener在设置为null之后可以被回收，运行结果如图三所示。
 ```C#
     public class GenericManagerTest
     {
@@ -106,7 +106,50 @@ bool ReceiveWeakEvent (Type managerType, object sender, EventArgs e);
 ![图三]()
 
 >3. 自己编写Event Manager
+首先，创建一个类如CustomizedWeakEventManager并继承自WeakEventManager，然后重写基类WeakEventManager中的StartListening和StopListening函数；此外CustomizedWeakEventManager也提供了AddListener和RemoveListener函数类方便添加和移除监听器，类的代码如下：
+```C#
+    public class CustomizedWeakEventManager : WeakEventManager
+    {
+        private static CustomizedWeakEventManager CurrentManager
+        {
+            get
+            {
+                CustomizedWeakEventManager manager = (CustomizedWeakEventManager)GetCurrentManager(typeof(CustomizedWeakEventManager));
 
+                if (manager == null)
+                {
+                    manager = new CustomizedWeakEventManager();
+                    SetCurrentManager(typeof(CustomizedWeakEventManager), manager);
+                }
+
+                return manager;
+            }
+        }
+
+
+        public static void AddListener(CustomEventSource source, IWeakEventListener listener)
+        {
+            CurrentManager.ProtectedAddListener(source, listener);
+        }
+
+        public static void RemoveListener(CustomEventSource source, IWeakEventListener listener)
+        {
+            CurrentManager.ProtectedRemoveListener(source, listener);
+        }
+
+        protected override void StartListening(object source)
+        {
+            (source as CustomEventSource).CustomEvent += DeliverEvent;
+        }
+
+        protected override void StopListening(object source)
+        {
+            (source as CustomEventSource).CustomEvent -= DeliverEvent;
+        }
+    }
+```
+程序执行结果如下图:
+![图四]()
 
 ####其他资源
 1. https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/weak-event-patterns

@@ -20,3 +20,5 @@
 /.vs
 /Fintech_Wechat/Article/~$ock Data Analysis with Python.docx
 /Blog/Code/AStockViewer/.vs/CodeSample/v16/Server/sqlite3
+/Blog/Code/AStockViewer/WeakEventPattern/bin/Debug
+/Blog/Code/AStockViewer/WeakEventPattern/obj/Debug
