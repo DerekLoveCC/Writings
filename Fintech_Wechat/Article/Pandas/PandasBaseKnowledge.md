@@ -72,7 +72,7 @@ database_df
 2. 使用连接串创建odbc连接对象conn
 3. 使用sql语句和conn调用pd.read_sql函数，并读取数据到DataFrame对象database_df中，运行结果如下图：
 ![从数据库构造DataFrame]()
-##清理和分析数据
+##操作数据
 >把数据加载到DataFrame之后，首先我们需要查看一下数据的整体情况，下面是一些常用的函数以及它们的说明
 ```Python
 database_df.info()# 1.显示总共有多少行数据，以及行号的范围；2.显示总共有多少列，每一列的名字，类型，以及每一列有多少个非null的对象；4.内存使用情况
@@ -80,7 +80,6 @@ database_df.shape #显示表总共有多少行多少列
 database_df.describe()#统计每一列的数据情况，如有多少非null值，多少唯一值，top值是什么，频率是多少
 database_df.columns#查看列名
 database_df.values#返回所有的值
-database_df.value_counts()
 ```
 >下图是运行结果：
 ![查看数据表总体情况]()
@@ -92,26 +91,29 @@ database_df.head(10)#查看前10条数据，默认是前5条
 database_df.tail(6)#查看末尾6条数据，默认是末尾5条
 database_df['IPODate']#查看IPODate这一列的数据
 database_df.loc[100]#查看第101行数据
-database_df[database_df['Industry']=='J 金融业']#获取金融业的公司
 database_df[database_df['AStockCode'].isin(['000002','000004'])]#选取股票代码是000002，000004的两只股票。
+database_df[database_df['Industry']=='J 金融业']#获取金融业的公司
 ```
+>运行结果如下图：
+![查看数据]()
 >其他操作：
 ```Python
 database_df.rename({'IPODate':'IpoDate'})#重命名IPODate列为IpoDate
-database_df.isnull()
-database_df.isnull().sum()
-database_df.append()
-database_df.drop_duplicates(inplace=true|false, select=first|last|False)
-database_df.dropna()
-database_df.fillna()
-database_df.corr()
-database_df.apply()
-database_df.plot()
-plt.rcParams.update({'figure.figsize':(10,8),'font-size':20})
+database_df.isnull()#判断每一个值是否为空
+database_df.isnull().sum()#统计每一列空值的个数
+database_df.append(another_data_frame)#把两个DataFrame合并成一个，列不变，行变多
+database_df.drop_duplicates(inplace=true|false, select=first|last|False)#删除重复行
+database_df.dropna()#删除有空值的行
+database_df.fillna(0)#用0代替所有空值
+database_df.corr()#求相关系数
+database_df.apply(func)#对每一个元素执行传入的函数，如database_df.apply(lambda x:x*2)
+database_df.plot()#对数值数据进行绘图，在绘图之前可以通过plt.rcParams.update({'figure.figsize':(10,8),'font.size':20})来设置图像的尺寸
+
 ```
-
-
-
-
 ##保存数据
+>我们在修改完DataFrame之后可以把它保存到CSV，EXCEL，Database里，具体函数如下：
+1. database_df.to_csv('../data/shanghai_stocks_updated.csv')
+2. database_df.to_excel('../data/shenzhen_stocks_updated.xlsx')
+3. database_df.to_json('../data/shanghai_stocks——updated.json')
 ##总结
+本文中我们简单说明了如何把数据加载到DataFrame中，操作DataFrame中的数据，以及把修改后的数据保存到不同类型的文件中。
