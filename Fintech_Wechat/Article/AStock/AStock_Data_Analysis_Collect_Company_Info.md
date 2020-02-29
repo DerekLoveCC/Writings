@@ -27,25 +27,12 @@
 
 ![Company Info table](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/AStock/company_info/163_companyInfo_table.png)
 
->获得table之后，我们就可以通过如下的代码来获得具体的公司信息了：
-
-``` python
-def parse_span(result, table):
-        for item in table.find_all('td', class_='td_label'):
-            for sibling in item.next_siblings:
-                if sibling.name == 'td':
-                    result[item.string] = str(sibling.string)
-                    break
-result = {}
-for name_span in tables:
-    parse_span(result, name_span)
-```
->最后所有的信息都会以字典的形式存放在result中。以下是执行结果截图：
+>获得table之后，我们就可以通过如下的代码来得到具体的公司信息了，信息最后会放到名为result的字典中，以下是执行结果截图：
 
 ![execute result](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/AStock/company_info/execute_result.png)
 
 >到此，获取公司的基本信息的方法就介绍完毕了，读者只需把相应的代码封装成函数，并传入相应的url即可获得相应的dic，url的构造请参考第一步中的解析。
-完整notebook请参见:
+完整notebook请参见:https://github.com/DerekLoveCC/Writings/blob/master/Fintech_Wechat/Code/AStockDataAnalysis/CrawlCompanyDetailInfo.ipynb
 
 <a id="jump_fintech"></a>
 ![Fintech极客](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
