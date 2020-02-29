@@ -11,15 +11,15 @@
 ![Company Info](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/AStock/company_info/163_companyInfo.png)
 
 >该网页中包含华能国际的公司资料信息，如公司简介，IPO资料，公司高管等等，下面我们就一起看看如何使用Python把其中的公司简介和IPO资料信息抓取下来。
-我们会用到python的两个库：1.requests 2.bs4，如果没有安装，请使用pip或者Anancoda进行安装。
+我们会用到python的两个库：1.requests 2.bs4，如果没有安装，请使用pip或者Anaconda进行安装。
 
->第一步，我们分析一下网址 http://quotes.money.163.com/f10/gszl_600011.html, 很容易发现网址的最后一部分 gszl_600011.html 中的gszl是公司资料的汉语拼音缩写，下划线后面的600011是股票代码，所以给定任意股票代码，我们只需要替换掉网址中的股票代码就能得到新股票的公司资料url
+>第一步，我们稍加分析一下网址 http://quotes.money.163.com/f10/gszl_600011.html, 就会发现网址的最后一部分 gszl_600011.html 中的gszl是公司资料的汉语拼音缩写，下划线后面的600011是股票代码，所以给定任意股票代码，我们只需要替换掉网址中的股票代码就能得到新股票的公司资料url
 
->第二步，我们引入要使用的库，然后使用requests获取相应的页面，具体代码如下所示：
+>第二步，我们引入要使用的库，然后使用requests获取相应的页面，具体代码和执行情况如下所示：
 
 ![Company Info html](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/AStock/company_info/163_companyInfoHtml_code.png)
 
->第三步，我们获取html之后，就可以使用bs4中的BeautifulSoup类来解析了。首先，在获得的html文本中找到我们想要的信息(使用Notepad等文件编辑器打开，并搜索即可)，会发现我们想要的信息就table标记中，而该table的class属性中包含table_details，如下图所示：
+>第三步，我们获取html之后，就可以使用bs4中的BeautifulSoup类来解析了它了。首先，在获得的html文本中找到我们想要的信息(使用Notepad等文件编辑器打开，并搜索即可)，会发现我们想要的信息就table标记中，而该table的class属性中包含table_details，如下图所示：
 
 ![Company Info table in html](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/AStock/company_info/163_companyInfo_tableInHtml.png)
 
@@ -31,8 +31,10 @@
 
 ![execute result](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/AStock/company_info/execute_result.png)
 
->到此，获取公司的基本信息的方法就介绍完毕了，读者只需把相应的代码封装成函数，并传入相应的url即可获得相应的dic，url的构造请参考第一步中的解析。
-完整notebook请参见:https://github.com/DerekLoveCC/Writings/blob/master/Fintech_Wechat/Code/AStockDataAnalysis/CrawlCompanyDetailInfo.ipynb
+>到此，获取公司基本信息的方法就介绍完毕了，读者只需把相应的代码封装成函数，并传入相应的url即可获得相应的dic，关于url的构造，请参考第一步中的解析。
+完整的notebook请参见:https://github.com/DerekLoveCC/Writings/blob/master/Fintech_Wechat/Code/AStockDataAnalysis/CrawlCompanyDetailInfo.ipynb
+
+>在下一篇文章中，会介绍如何获得公司所属的板块信息
 
 <a id="jump_fintech"></a>
 ![Fintech极客](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
