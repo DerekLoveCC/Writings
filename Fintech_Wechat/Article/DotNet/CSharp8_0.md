@@ -95,7 +95,7 @@
 >上述代码中包含了一个接口ICustomer和两个实现类FintechCustomer，NormalCustomer。有以下几点需要注意：
 1. ICustomer接口提供了GetName的具体实现
 2. FintechCustomer类提供了自己的GetName实现，从而覆盖了ICustomer中的GetName
-3. NormalCustomer类没有提供自己的GetName实现，但也没有继承ICustomer中的GetName，通下面的调用示例，我们可以验证这点
+3. NormalCustomer类没有提供自己的GetName实现，但也没有继承ICustomer中的GetName，通过下面的调用示例，我们可以验证这点
 4. 在ICustomer接口内部，实现成员可以加各种修饰符如：private, protected, public等，但它们都不会被继承。
 
 >代码调用示例如下：
@@ -201,7 +201,7 @@
         (_, _) => "tie"
     };
 ```
->上面是剪刀石头布的游戏，可以看到switch表达式使用了元组还匹配只返回那条消息，其中(_,_)=>"tie"表示未找到任何匹配时，返回"tie"。
+>上面是剪刀石头布的游戏，可以看到switch表达式使用了元组匹配来返回对的消息，其中(_,_)=>"tie"表示未找到任何匹配时，返回"tie"。
 
 ####位置模式（Positional patterns）
 >C# 7.0引入了Deconstruct函数，如果一个类中还有Deconstrut函数，那么就可以直接把该类的属性分解到不同的变量中。在C# 8.0中，可以通过位置模式在switch表达式中进行多个属性的匹配，下面是一个例子：
