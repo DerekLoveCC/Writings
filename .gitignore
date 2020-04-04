@@ -24,3 +24,6 @@
 /Blog/Code/AStockViewer/WeakEventPattern/obj/Debug
 *.cache
 /Fintech_Wechat/Code/AStockDataAnalysis/.ipynb_checkpoints
+/Blog/Code/AStockViewer/AStockViewer.UI/bin/Debug
+/Blog/Code/AStockViewer/AStockViewer.UI/obj/Debug
+/Blog/Code/WPFInjector/WPFInjector/.vs/WPFInjector/v16

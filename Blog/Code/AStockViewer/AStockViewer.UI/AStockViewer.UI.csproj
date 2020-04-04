@@ -59,7 +59,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\Class1.cs" />
+    <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\DialogCloser.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\DialogCloserSampleViewModel.cs" />

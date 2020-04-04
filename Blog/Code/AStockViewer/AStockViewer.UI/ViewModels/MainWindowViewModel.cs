@@ -1,6 +1,5 @@
 ﻿using AStockViewer.UI.Helpers;
 using AStockViewer.UI.Views;
-using System;
 using System.Windows.Input;
 
 namespace AStockViewer.UI.ViewModels
