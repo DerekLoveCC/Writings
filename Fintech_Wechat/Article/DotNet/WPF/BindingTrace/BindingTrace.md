@@ -25,7 +25,7 @@
 Traces no available additional information.
 ###调试运行并查看输出信息
 >使用visual studio调试运行，并打开output窗口可以看到如下图所示的信息，这些信息清楚的记录了Binding的整个过程，对解决Binding问题很有帮助
-![WPF Binding](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
+![WPF Binding](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Article/DotNet/WPF/BindingTrace/BindingTraceOutput.png)
 
 <a id="jump_fintech"></a>
 ![Fintech极客](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
