@@ -1,0 +1,36 @@
+﻿<Window x:Class="AStockViewer.UI.Views.DialogCloserSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:AStockViewer.UI.Views"
+        xmlns:localHelpers="clr-namespace:AStockViewer.UI.Helpers"
+        xmlns:localViewModels="clr-namespace:AStockViewer.UI.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Close using attached property"
+        Width="400"
+        Height="300"
+        d:DataContext="{d:DesignInstance Type=localViewModels:DialogCloserSampleViewModel}"
+        localHelpers:DialogCloser.DialogResult="{Binding DialogResult}"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <localViewModels:DialogCloserSampleViewModel x:Key="ViewModel"></localViewModels:DialogCloserSampleViewModel>
+    </Window.Resources>
+    <Window.DataContext>
+        <StaticResource ResourceKey="ViewModel"></StaticResource>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold" TextWrapping="WrapWithOverflow">
+            This window will be closed via attached property in MVVM mode when click below button
+        </TextBlock>
+        <StackPanel Grid.Row="1">
+            <Button Command="{Binding OkCommand}">Ok</Button>
+            <Button Command="{Binding CancelCommand}">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Window>

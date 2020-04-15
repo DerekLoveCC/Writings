@@ -4,3 +4,33 @@
 
 *.suo
 /.vs/VSWorkspaceState.json
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/slnx.sqlite-journal
+/Blog/Code/UsingStatementLocation/.vs/UsingStatementLocation/v16
+/Blog/Code/UsingStatementLocation/UsingStatementLocation/bin/Debug
+/Blog/Code/UsingStatementLocation/UsingStatementLocation/obj/Debug
+/Blog/Code/UsingStatementLocation/UsingStatementLocation/obj/Release
+/Blog/Code/WPFInjector/InjectorLaucher64/obj/Debug
+/Blog/Code/WPFInjector/InjectorLaucher64/obj/Release
+/Blog/Code/WPFInjector/InjectorLauncher32/obj/Debug
+/Blog/Code/WPFInjector/InjectorLauncher32/obj/Release
+/Blog/Code/WPFInjector/InjectorLauncher32/obj
+/Blog/Code/WPFInjector/InjectorLauncher64/obj
+/Blog/Code/WPFInjector/WPFInjector/obj
+/Blog/Code/WPFInjector/WpfInjectorTarget/obj/Debug
+/Blog/Code/WPFInjector/WpfInjectorTarget/obj
+/.vs/Writings/v16
+/.vs
+/Fintech_Wechat/Article/~$ock Data Analysis with Python.docx
+/Blog/Code/AStockViewer/.vs/CodeSample/v16/Server/sqlite3
+/Blog/Code/AStockViewer/WeakEventPattern/bin/Debug
+/Blog/Code/AStockViewer/WeakEventPattern/obj/Debug
+*.cache
+/Fintech_Wechat/Code/AStockDataAnalysis/.ipynb_checkpoints
+/Blog/Code/AStockViewer/AStockViewer.UI/bin/Debug
+/Blog/Code/AStockViewer/AStockViewer.UI/obj/Debug
+/Blog/Code/WPFInjector/WPFInjector/.vs/WPFInjector/v16
+*.suo

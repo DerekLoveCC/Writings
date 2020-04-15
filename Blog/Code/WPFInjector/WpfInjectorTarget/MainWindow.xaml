@@ -1,0 +1,22 @@
+﻿<Window x:Class="WpfInjectorTarget.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:WpfInjectorTarget"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="MainWindow"
+        Width="800"
+        Height="450"
+        mc:Ignorable="d">
+    <Grid Margin="0,50,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBox x:Name="tbx_name"></TextBox>
+            <Button x:Name="btn_Save">Save</Button>
+        </StackPanel>
+        <Button x:Name="btn_SaveAll" Grid.Row="1">Save All</Button>
+    </Grid>
+</Window>
