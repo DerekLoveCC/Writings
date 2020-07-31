@@ -22,3 +22,5 @@
 |3          |编译器只接受 C# 3.0 或更低版本中所含的语法|
 |ISO-2      |编译器只接受 ISO/IEC 23270:2006 C# (2.0) 中所含的语法|
 |ISO-1      |编译器只接受 ISO/IEC 23270:2003 C# (1.0/1.2) 中所含的语法|
+
+![Fintech技术汇](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
