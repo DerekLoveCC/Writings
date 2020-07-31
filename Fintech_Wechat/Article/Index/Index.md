@@ -1,4 +1,4 @@
->微信公众号：**[Fintech极客](#jump_fintech)**
+>微信公众号：**[Fintech技术汇](#jump_fintech)**
 作者为软件开发工程师，就职于金融信息科技类公司，通过CFA一级，分享计算机和金融相结合领域的技术和知识。
 
 ## 股票指数
@@ -77,4 +77,4 @@
 本文简单介绍了一些股票指数相关的知识，算是对基础知识的一个积累。
 
 <a id="jump_fintech"></a>
-![Fintech极客](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
+![Fintech技术汇](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)

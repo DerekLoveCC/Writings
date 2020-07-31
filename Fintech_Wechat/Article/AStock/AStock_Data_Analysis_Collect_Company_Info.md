@@ -1,4 +1,4 @@
->微信公众号：**[Fintech极客](#jump_fintech)**
+>微信公众号：**[Fintech技术汇](#jump_fintech)**
 作者为软件开发工程师，就职于金融信息科技类公司，通过CFA一级，分享计算机和金融相结合领域的技术和知识。
 
 # A股数据分析之收集数据：公司详细信息
@@ -37,4 +37,4 @@
 >在下一篇文章中，会介绍如何获得公司所属的板块信息
 
 <a id="jump_fintech"></a>
-![Fintech极客](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
+![Fintech技术汇](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
