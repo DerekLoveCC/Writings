@@ -1,6 +1,6 @@
 >在.Net开发过程中，经常会使用一些没有源码的第三方库，在代码出了问题时，如果怀疑跟该库的内部实现有关，我们该怎么办呢？首先，自然会想到反编译去看看代码或者联系作者，然而，有没有办法让我们在debug时进入这个第三方库，并看看里面在运行时到底发生了什么呢？本文就来介绍三种debug第三方库的办法，希望能够对你有所帮助。
 
->先介绍一下我们的样例代码，下面这段代码比较简单，主要功能：从text.csv文件中读取每行数据并在控制台显示。其中用到的类CsvConfiguration，CsvReader，CsvDataReader来自第三方库CsvHelper，可以通过Nuget下载，这里假设我们想要调试CsvDataReader类的Read方法。完整的代码工程请参考：https://github.com/DerekLoveCC/Writings/tree/master/Code/DebugWithoutSourceCodeInDotNet
+>先介绍一下我们的样例代码，下面这段代码比较简单，主要功能：从text.csv文件中读取每行数据并在控制台显示。其中用到的类CsvConfiguration，CsvReader，CsvDataReader来自第三方库CsvHelper，可以通过Nuget下载，这里假设我们想要调试CsvDataReader类的Read方法。完整的代码工程请参考：https://github.com/DerekLoveCC/Writings/tree/master/Article/DebugWithoutSourceCodeInDotNet/code
 
 ```csharp
     internal class Program
