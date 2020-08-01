@@ -34,3 +34,5 @@
 /Blog/Code/AStockViewer/AStockViewer.UI/obj/Debug
 /Blog/Code/WPFInjector/WPFInjector/.vs/WPFInjector/v16
 *.suo
+/Code/DebugWithoutSourceCodeInDotNet/obj/Debug
+/Code/DebugWithoutSourceCodeInDotNet/bin/Debug
