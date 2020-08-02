@@ -29,9 +29,26 @@ https://zeroc.com/download/Ice/3.7/Ice-3.7.4.msi
 
 >在了解了Ice的结构和基本概念之后，让我们动手写个demo看看具体怎么使用吧。为了体现Ice的跨语言和跨平台功能，我们这里用Java实现server端，用C#实现client端。程序的主要功能：client可以通过向sever发送A股的股票代码来获得其对应公司的详细信息， 下面我们一起看看具体的步骤。（注：这里的公司信息都是dummy的）
 
-
-
-
+1. 定义client和service交互接口，这里我们定义两个class：CompanyInfo和AStockService：
+   
+   ``` java
+   module astock
+   {
+       class CompanyInfo
+       {
+           int id;
+           string name;
+           string addr;
+       }
+   }
+   module astock
+   {
+       class AStockService
+       {
+           CompanyInfo GetCompanyInfo(int id);
+       }
+   }
+   ```
 
 
 
