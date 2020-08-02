@@ -29,7 +29,7 @@
         }
     }
 ```
-###方法一 使用dnSpy
+### 方法一 使用dnSpy
 >dnSpy构建在ILSpy的基础上，开源免费，不但可以反编译代码而且能够调试，关于dnSpy的更多信息请访问:https://github.com/0xd4d/dnSpy  ，下面我们一起来看看具体操作。
 1. 下载dnSpy，并根据目标程序是64还是32位，打开对应的dnSpy。本例中由于目标程序是32位的，所以打开了32位的dnSpy
 2. 用dnSpy打开CsvHelper的dll，并找到CsvDataReader类的Read方法，点击左侧来设置调试断点，如下图所示：
@@ -41,24 +41,24 @@
 
 >总结，dnSpy功能很强大，对于.net的系统库也是可以的，从此调试无忧。此外，dnSpy可以附加到已运行的进程上，但是由于JIT的优化，使得这种方式可能无法获得想要的信息。关于编译优化和运行时优化，咱们以后再聊。
 
-###方法二 使用dotPeek + Visual Studio
+### 方法二 使用dotPeek + Visual Studio
 >Visual Studio就无需介绍了，dotPeek是大名鼎鼎的JetBrains出品的免费工具，可以到：https://www.jetbrains.com/decompiler/ 下载。这种方法的基本思想就是把dotPeek作为VS的Symbol Server，下面是使用方法：
 1. 根据目标程序是64还是32位，打开对应的dotPeek，本例是32bit所以打开的是32位dotPeek
 2. 用dotPeek打开CsvHelper的dll，然后在工具栏里点击“Start Symbol Server”按钮开启Symbol Server，如下图：
 ![start symbol Server](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotpeek_start_symbol_server.png)
 如果是第一次打开symbol server会弹出下面的配置框，请根据你的情况选择，笔者选择了“All Assemblies”，以后如果想修改，可以在Tools->Options->Symbol Server里修改
 ![dotpeek symbol server config](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotpeek_symbolserver_config.png)
-1. 现在就开始配置VS了，在VS里通过Tools->Options打开Options配置窗口，在Debugging/General下，取消“Enable Just My Code”， 并选中“Suppress JIT optimization on module load”，如下图：
-![dotpeek symbol server config](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotpeek_vs_config.png)
-4. 设置VS的Symbol Server，回到dotPeek，打开Tools->Options\Symbol Server，拷贝一下地址，然后在Visual Studio的Tools->Options\Debugging\Symbols, 添加一个新的地址，请查看下图：
+3. 现在就可以配置VS了，在VS里通过Tools->Options打开Options配置窗口，在Debugging/General下，取消“Enable Just My Code”， 并选中“Suppress JIT optimization on module load”，如下图：
+![dotpeek vs config](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotpeek_vs_config.png)
+4. 设置VS的Symbol Server，首先回到dotPeek，打开Tools->Options\Symbol Server，拷贝一下地址，然后在Visual Studio的Tools->Options\Debugging\Symbols, 添加一个新的地址，请查看下图：
 ![dotpeek get symbol server addr](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotpeek_symbol_server_addr.png)
 ![dotpeek vs config symbol server addr](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotpeek_vs_add_symbol_server.png)
 5. 现在，在VS里就可以正常地debug了，第一次由于需要生成和加载pdb文件，所以有可能慢点。笔者测试效果图如下：
-![dotpeek vs config symbol server addr](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotPeek_TestResult.png)
+![dotpeek test result](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/dotPeek_TestResult.png)
 
->总结，这种方式的有点是能够使用熟悉的VS
+>总结，这种方式的优点是能够使用熟悉的VS
 
-###方法三 Resharper
+### 方法三 Resharper
 >Resharper也是JetBrains的付费产品，使用也很方便，请查看下面步骤：
 
 1. 安装Resharper之后，Resharper会作为VS的Extension，首先确保Enable了Resharper：
@@ -67,5 +67,6 @@
 3. 右键点击CsvHelper程序集，选择“Load Symbols with ReSharper Decompiler”，等symbol加载完之后，就可以正常debug了，可以通过F11进入Read方法的内部，下面是一些相关截图
 ![resharper load sysmbol](https://github.com/DerekLoveCC/Writings/raw/master/Article/DebugWithoutSourceCodeInDotNet/image/resharper_loadsymbol.png)
 
+>总结，这种方式可以使用VS，但是Resharper插件可能拖慢VS
 
-![Fintech技术汇](https://github.com/DerekLoveCC/Writings/raw/master/Fintech_Wechat/Fintech.jpg)
+![Fintech技术汇](https://img2020.cnblogs.com/blog/498574/202008/498574-20200801213206265-563825556.jpg)
