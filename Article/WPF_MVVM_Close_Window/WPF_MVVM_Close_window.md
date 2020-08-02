@@ -30,3 +30,5 @@
 
 ![图1](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/WPF_MVVM_Close_Window/wpf_mvmv_dialog_close_1.png)
 ![图2](https://github.com/DerekLoveCC/Writings/raw/master/Blog/Article/WPF_MVVM_Close_Window/wpf_mvmv_dialog_close_2.png)
+
+![Fintech技术汇](https://img2020.cnblogs.com/blog/498574/202008/498574-20200801213206265-563825556.jpg)

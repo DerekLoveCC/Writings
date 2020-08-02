@@ -51,3 +51,5 @@ sync_hook.script
 /Article/DebugWithoutSourceCodeInDotNet/code
 /Article/zerocIce/code/Client/obj/Debug
 /Article/zerocIce/code/Client/.vs/IceTestClient/config
+/Article/WPF_MVVM_Close_Window/code/CloseWindow/bin/Debug
+/Article/WPF_MVVM_Close_Window/code/CloseWindow/obj/Debug
