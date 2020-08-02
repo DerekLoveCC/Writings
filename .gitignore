@@ -50,3 +50,4 @@ sync_hook.script
 **/.Archive
 /Article/DebugWithoutSourceCodeInDotNet/code
 /Article/zerocIce/code/Client/obj/Debug
+/Article/zerocIce/code/Client/.vs/IceTestClient/config
