@@ -1,0 +1,1179 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IceStorm</name>
+    </assembly>
+    <members>
+        <member name="T:IceStorm.LinkExists">
+            <summary>
+            This exception indicates that an attempt was made to create a link
+            that already exists.
+            </summary>
+        </member>
+        <member name="T:IceStorm.NoSuchLink">
+            <summary>
+            This exception indicates that an attempt was made to remove a
+            link that does not exist.
+            </summary>
+        </member>
+        <member name="T:IceStorm.AlreadySubscribed">
+            <summary>
+            This exception indicates that an attempt was made to subscribe
+            a proxy for which a subscription already exists.
+            </summary>
+        </member>
+        <member name="T:IceStorm.InvalidSubscriber">
+            <summary>
+            This exception indicates that an attempt was made to subscribe
+            a proxy that is null.
+            </summary>
+        </member>
+        <member name="T:IceStorm.BadQoS">
+            <summary>
+            This exception indicates that a subscription failed due to an
+            invalid QoS.
+            </summary>
+        </member>
+        <member name="T:IceStorm.TopicExists">
+            <summary>
+            This exception indicates that an attempt was made to create a topic
+            that already exists.
+            </summary>
+        </member>
+        <member name="T:IceStorm.NoSuchTopic">
+            <summary>
+            This exception indicates that an attempt was made to retrieve a
+            topic that does not exist.
+            </summary>
+        </member>
+        <member name="T:IceStorm.TopicPrx">
+             <summary>
+             Publishers publish information on a particular topic.
+             A topic
+             logically represents a type.
+            
+             </summary>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getName(Ice.OptionalContext)">
+             <summary>
+             Get the name of this topic.
+             </summary>
+             <returns>The name of the topic.
+            
+             </returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getNameAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get the name of this topic.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getName(Ice.OptionalContext)">
+            <summary>
+            Get the name of this topic.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getName(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the name of this topic.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getName(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the name of this topic.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_getName(Ice.AsyncResult)">
+             <summary>
+             Get the name of this topic.
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>The name of the topic.
+            
+             </returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getPublisher(Ice.OptionalContext)">
+             <summary>
+             Get a proxy to a publisher object for this topic.
+             To publish
+             data to a topic, the publisher calls getPublisher and then
+             casts to the topic type. An unchecked cast must be used on this
+             proxy. If a replicated IceStorm deployment is used this call
+             may return a replicated proxy.
+            
+             </summary>
+             <returns>A proxy to publish data on this topic.</returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getPublisherAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get a proxy to a publisher object for this topic.
+            To publish
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getPublisher(Ice.OptionalContext)">
+            <summary>
+            Get a proxy to a publisher object for this topic.
+            To publish
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getPublisher(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get a proxy to a publisher object for this topic.
+            To publish
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getPublisher(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get a proxy to a publisher object for this topic.
+            To publish
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_getPublisher(Ice.AsyncResult)">
+            <summary>
+            Get a proxy to a publisher object for this topic.
+            To publish
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A proxy to publish data on this topic.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getNonReplicatedPublisher(Ice.OptionalContext)">
+             <summary>
+             Get a non-replicated proxy to a publisher object for this
+             topic.
+             To publish data to a topic, the publisher calls
+             getPublisher and then casts to the topic type. An unchecked
+             cast must be used on this proxy.
+            
+             </summary>
+             <returns>A proxy to publish data on this topic.</returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getNonReplicatedPublisherAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get a non-replicated proxy to a publisher object for this
+            topic.
+            To publish data to a topic, the publisher calls
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getNonReplicatedPublisher(Ice.OptionalContext)">
+            <summary>
+            Get a non-replicated proxy to a publisher object for this
+            topic.
+            To publish data to a topic, the publisher calls
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getNonReplicatedPublisher(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get a non-replicated proxy to a publisher object for this
+            topic.
+            To publish data to a topic, the publisher calls
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getNonReplicatedPublisher(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get a non-replicated proxy to a publisher object for this
+            topic.
+            To publish data to a topic, the publisher calls
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_getNonReplicatedPublisher(Ice.AsyncResult)">
+            <summary>
+            Get a non-replicated proxy to a publisher object for this
+            topic.
+            To publish data to a topic, the publisher calls
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A proxy to publish data on this topic.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.subscribeAndGetPublisher(System.Collections.Generic.Dictionary{System.String,System.String},Ice.ObjectPrx,Ice.OptionalContext)">
+             <summary>
+             Subscribe with the given qos to this topic.
+             A
+             per-subscriber publisher object is returned.
+            
+             </summary>
+             <param name="theQoS">The quality of service parameters for this
+             subscription.
+            
+             </param>
+             <param name="subscriber">The subscriber's proxy.
+            
+             </param>
+             <returns>The per-subscriber publisher object.
+            
+             </returns>
+             <exception name="AlreadySubscribed">Raised if the subscriber object is
+             already subscribed.
+            
+             </exception>
+             <exception name="InvalidSubscriber">Raised if the subscriber object is null.
+            
+             </exception>
+             <exception name="BadQoS">Raised if the requested quality of service
+             is unavailable or invalid.
+            
+             </exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.subscribeAndGetPublisherAsync(System.Collections.Generic.Dictionary{System.String,System.String},Ice.ObjectPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Subscribe with the given qos to this topic.
+             A
+             </summary>
+             <param name="theQoS">The quality of service parameters for this
+             subscription.
+            
+             </param>
+             <param name="subscriber">The subscriber's proxy.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_subscribeAndGetPublisher(System.Collections.Generic.Dictionary{System.String,System.String},Ice.ObjectPrx,Ice.OptionalContext)">
+             <summary>
+             Subscribe with the given qos to this topic.
+             A
+             </summary>
+             <param name="theQoS">The quality of service parameters for this
+             subscription.
+            
+             </param>
+             <param name="subscriber">The subscriber's proxy.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_subscribeAndGetPublisher(System.Collections.Generic.Dictionary{System.String,System.String},Ice.ObjectPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Subscribe with the given qos to this topic.
+             A
+             </summary>
+             <param name="theQoS">The quality of service parameters for this
+             subscription.
+            
+             </param>
+             <param name="subscriber">The subscriber's proxy.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_subscribeAndGetPublisher(System.Collections.Generic.Dictionary{System.String,System.String},Ice.ObjectPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Subscribe with the given qos to this topic.
+             A
+             </summary>
+             <param name="theQoS">The quality of service parameters for this
+             subscription.
+            
+             </param>
+             <param name="subscriber">The subscriber's proxy.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_subscribeAndGetPublisher(Ice.AsyncResult)">
+             <summary>
+             Subscribe with the given qos to this topic.
+             A
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>The per-subscriber publisher object.
+            
+             </returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.unsubscribe(Ice.ObjectPrx,Ice.OptionalContext)">
+             <summary>
+             Unsubscribe the given subscriber.
+             </summary>
+             <param name="subscriber">The proxy of an existing subscriber.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.unsubscribeAsync(Ice.ObjectPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Unsubscribe the given subscriber.
+             </summary>
+             <param name="subscriber">The proxy of an existing subscriber.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_unsubscribe(Ice.ObjectPrx,Ice.OptionalContext)">
+             <summary>
+             Unsubscribe the given subscriber.
+             </summary>
+             <param name="subscriber">The proxy of an existing subscriber.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_unsubscribe(Ice.ObjectPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Unsubscribe the given subscriber.
+             </summary>
+             <param name="subscriber">The proxy of an existing subscriber.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_unsubscribe(Ice.ObjectPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Unsubscribe the given subscriber.
+             </summary>
+             <param name="subscriber">The proxy of an existing subscriber.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_unsubscribe(Ice.AsyncResult)">
+            <summary>
+            Unsubscribe the given subscriber.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.link(IceStorm.TopicPrx,System.Int32,Ice.OptionalContext)">
+             <summary>
+             Create a link to the given topic.
+             All events originating
+             on this topic will also be sent to linkTo.
+            
+             </summary>
+             <param name="linkTo">The topic to link to.
+            
+             </param>
+             <param name="cost">The cost to the linked topic.
+            
+             </param>
+             <exception name="LinkExists">Raised if a link to the same topic already
+             exists.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.linkAsync(IceStorm.TopicPrx,System.Int32,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Create a link to the given topic.
+             All events originating
+             </summary>
+             <param name="linkTo">The topic to link to.
+            
+             </param>
+             <param name="cost">The cost to the linked topic.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_link(IceStorm.TopicPrx,System.Int32,Ice.OptionalContext)">
+             <summary>
+             Create a link to the given topic.
+             All events originating
+             </summary>
+             <param name="linkTo">The topic to link to.
+            
+             </param>
+             <param name="cost">The cost to the linked topic.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_link(IceStorm.TopicPrx,System.Int32,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a link to the given topic.
+             All events originating
+             </summary>
+             <param name="linkTo">The topic to link to.
+            
+             </param>
+             <param name="cost">The cost to the linked topic.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_link(IceStorm.TopicPrx,System.Int32,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a link to the given topic.
+             All events originating
+             </summary>
+             <param name="linkTo">The topic to link to.
+            
+             </param>
+             <param name="cost">The cost to the linked topic.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_link(Ice.AsyncResult)">
+            <summary>
+            Create a link to the given topic.
+            All events originating
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.unlink(IceStorm.TopicPrx,Ice.OptionalContext)">
+             <summary>
+             Destroy the link from this topic to the given topic linkTo.
+             </summary>
+             <param name="linkTo">The topic to destroy the link to.
+            
+             </param>
+             <exception name="NoSuchLink">Raised if a link to the topic does not exist.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.unlinkAsync(IceStorm.TopicPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Destroy the link from this topic to the given topic linkTo.
+             </summary>
+             <param name="linkTo">The topic to destroy the link to.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_unlink(IceStorm.TopicPrx,Ice.OptionalContext)">
+             <summary>
+             Destroy the link from this topic to the given topic linkTo.
+             </summary>
+             <param name="linkTo">The topic to destroy the link to.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_unlink(IceStorm.TopicPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Destroy the link from this topic to the given topic linkTo.
+             </summary>
+             <param name="linkTo">The topic to destroy the link to.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_unlink(IceStorm.TopicPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Destroy the link from this topic to the given topic linkTo.
+             </summary>
+             <param name="linkTo">The topic to destroy the link to.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_unlink(Ice.AsyncResult)">
+            <summary>
+            Destroy the link from this topic to the given topic linkTo.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getLinkInfoSeq(Ice.OptionalContext)">
+            <summary>
+            Retrieve information on the current links.
+            </summary>
+            <returns>A sequence of LinkInfo objects.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getLinkInfoSeqAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Retrieve information on the current links.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getLinkInfoSeq(Ice.OptionalContext)">
+            <summary>
+            Retrieve information on the current links.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getLinkInfoSeq(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Retrieve information on the current links.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getLinkInfoSeq(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Retrieve information on the current links.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_getLinkInfoSeq(Ice.AsyncResult)">
+            <summary>
+            Retrieve information on the current links.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A sequence of LinkInfo objects.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getSubscribers(Ice.OptionalContext)">
+            <summary>
+            Retrieve the list of subscribers for this topic.
+            </summary>
+            <returns>The sequence of Ice identities for the subscriber objects.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.getSubscribersAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Retrieve the list of subscribers for this topic.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getSubscribers(Ice.OptionalContext)">
+            <summary>
+            Retrieve the list of subscribers for this topic.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getSubscribers(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Retrieve the list of subscribers for this topic.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_getSubscribers(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Retrieve the list of subscribers for this topic.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_getSubscribers(Ice.AsyncResult)">
+            <summary>
+            Retrieve the list of subscribers for this topic.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The sequence of Ice identities for the subscriber objects.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.destroy(Ice.OptionalContext)">
+            <summary>
+            Destroy the topic.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicPrx.destroyAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Destroy the topic.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_destroy(Ice.OptionalContext)">
+            <summary>
+            Destroy the topic.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_destroy(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the topic.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.begin_destroy(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the topic.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicPrx.end_destroy(Ice.AsyncResult)">
+            <summary>
+            Destroy the topic.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:IceStorm.TopicManagerPrx">
+            <summary>
+            A topic manager manages topics, and subscribers to topics.
+            </summary>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.create(System.String,Ice.OptionalContext)">
+             <summary>
+             Create a new topic.
+             The topic name must be unique.
+            
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <returns>A proxy to the topic instance.
+            
+             </returns>
+             <exception name="TopicExists">Raised if a topic with the same name already
+             exists.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.createAsync(System.String,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Create a new topic.
+             The topic name must be unique.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_create(System.String,Ice.OptionalContext)">
+             <summary>
+             Create a new topic.
+             The topic name must be unique.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_create(System.String,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a new topic.
+             The topic name must be unique.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_create(System.String,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a new topic.
+             The topic name must be unique.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.end_create(Ice.AsyncResult)">
+             <summary>
+             Create a new topic.
+             The topic name must be unique.
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A proxy to the topic instance.
+            
+             </returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.retrieve(System.String,Ice.OptionalContext)">
+             <summary>
+             Retrieve a topic by name.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <returns>A proxy to the topic instance.
+            
+             </returns>
+             <exception name="NoSuchTopic">Raised if the topic does not exist.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.retrieveAsync(System.String,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Retrieve a topic by name.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_retrieve(System.String,Ice.OptionalContext)">
+             <summary>
+             Retrieve a topic by name.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_retrieve(System.String,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Retrieve a topic by name.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_retrieve(System.String,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Retrieve a topic by name.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.end_retrieve(Ice.AsyncResult)">
+             <summary>
+             Retrieve a topic by name.
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A proxy to the topic instance.
+            
+             </returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.retrieveAll(Ice.OptionalContext)">
+            <summary>
+            Retrieve all topics managed by this topic manager.
+            </summary>
+            <returns>A dictionary of string, topic proxy pairs.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.retrieveAllAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Retrieve all topics managed by this topic manager.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_retrieveAll(Ice.OptionalContext)">
+            <summary>
+            Retrieve all topics managed by this topic manager.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_retrieveAll(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Retrieve all topics managed by this topic manager.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_retrieveAll(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Retrieve all topics managed by this topic manager.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.end_retrieveAll(Ice.AsyncResult)">
+            <summary>
+            Retrieve all topics managed by this topic manager.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A dictionary of string, topic proxy pairs.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.getSliceChecksums(Ice.OptionalContext)">
+            <summary>
+            Returns the checksums for the IceStorm Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.getSliceChecksumsAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Returns the checksums for the IceStorm Slice definitions.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_getSliceChecksums(Ice.OptionalContext)">
+            <summary>
+            Returns the checksums for the IceStorm Slice definitions.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_getSliceChecksums(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns the checksums for the IceStorm Slice definitions.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.begin_getSliceChecksums(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns the checksums for the IceStorm Slice definitions.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.TopicManagerPrx.end_getSliceChecksums(Ice.AsyncResult)">
+            <summary>
+            Returns the checksums for the IceStorm Slice definitions.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+        </member>
+        <member name="T:IceStorm.FinderPrx">
+            <summary>
+            This inferface is advertised by the IceStorm service through the
+            Ice object with the identity `IceStorm/Finder'.
+            This allows clients
+            to retrieve the topic manager with just the endpoint information of
+            the IceStorm service.
+            </summary>
+        </member>
+        <member name="M:IceStorm.FinderPrx.getTopicManager(Ice.OptionalContext)">
+             <summary>
+             Get the topic manager proxy.
+             The proxy might point to several
+             replicas.
+            
+             </summary>
+             <returns>The topic manager proxy.</returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceStorm.FinderPrx.getTopicManagerAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get the topic manager proxy.
+            The proxy might point to several
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceStorm.FinderPrx.begin_getTopicManager(Ice.OptionalContext)">
+            <summary>
+            Get the topic manager proxy.
+            The proxy might point to several
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.FinderPrx.begin_getTopicManager(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the topic manager proxy.
+            The proxy might point to several
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.FinderPrx.begin_getTopicManager(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the topic manager proxy.
+            The proxy might point to several
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceStorm.FinderPrx.end_getTopicManager(Ice.AsyncResult)">
+            <summary>
+            Get the topic manager proxy.
+            The proxy might point to several
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The topic manager proxy.</returns>
+        </member>
+        <member name="T:IceStorm.TopicOperations_">
+             <summary>
+             Publishers publish information on a particular topic.
+             A topic
+             logically represents a type.
+            
+             </summary>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.getName(Ice.Current)">
+             <summary>
+             Get the name of this topic.
+             </summary>
+             <returns>The name of the topic.
+            
+             </returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.getPublisher(Ice.Current)">
+             <summary>
+             Get a proxy to a publisher object for this topic.
+             To publish
+             data to a topic, the publisher calls getPublisher and then
+             casts to the topic type. An unchecked cast must be used on this
+             proxy. If a replicated IceStorm deployment is used this call
+             may return a replicated proxy.
+            
+             </summary>
+             <returns>A proxy to publish data on this topic.</returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.getNonReplicatedPublisher(Ice.Current)">
+             <summary>
+             Get a non-replicated proxy to a publisher object for this
+             topic.
+             To publish data to a topic, the publisher calls
+             getPublisher and then casts to the topic type. An unchecked
+             cast must be used on this proxy.
+            
+             </summary>
+             <returns>A proxy to publish data on this topic.</returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.subscribeAndGetPublisher(System.Collections.Generic.Dictionary{System.String,System.String},Ice.ObjectPrx,Ice.Current)">
+             <summary>
+             Subscribe with the given qos to this topic.
+             A
+             per-subscriber publisher object is returned.
+            
+             </summary>
+             <param name="theQoS">The quality of service parameters for this
+             subscription.
+            
+             </param>
+             <param name="subscriber">The subscriber's proxy.
+            
+             </param>
+             <returns>The per-subscriber publisher object.
+            
+             </returns>
+             <exception name="AlreadySubscribed">Raised if the subscriber object is
+             already subscribed.
+            
+             </exception>
+             <exception name="InvalidSubscriber">Raised if the subscriber object is null.
+            
+             </exception>
+             <exception name="BadQoS">Raised if the requested quality of service
+             is unavailable or invalid.
+            
+             </exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.unsubscribe(Ice.ObjectPrx,Ice.Current)">
+             <summary>
+             Unsubscribe the given subscriber.
+             </summary>
+             <param name="subscriber">The proxy of an existing subscriber.
+            
+             </param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.link(IceStorm.TopicPrx,System.Int32,Ice.Current)">
+             <summary>
+             Create a link to the given topic.
+             All events originating
+             on this topic will also be sent to linkTo.
+            
+             </summary>
+             <param name="linkTo">The topic to link to.
+            
+             </param>
+             <param name="cost">The cost to the linked topic.
+            
+             </param>
+             <exception name="LinkExists">Raised if a link to the same topic already
+             exists.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.unlink(IceStorm.TopicPrx,Ice.Current)">
+             <summary>
+             Destroy the link from this topic to the given topic linkTo.
+             </summary>
+             <param name="linkTo">The topic to destroy the link to.
+            
+             </param>
+             <exception name="NoSuchLink">Raised if a link to the topic does not exist.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.getLinkInfoSeq(Ice.Current)">
+            <summary>
+            Retrieve information on the current links.
+            </summary>
+            <returns>A sequence of LinkInfo objects.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.getSubscribers(Ice.Current)">
+            <summary>
+            Retrieve the list of subscribers for this topic.
+            </summary>
+            <returns>The sequence of Ice identities for the subscriber objects.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicOperations_.destroy(Ice.Current)">
+            <summary>
+            Destroy the topic.
+            </summary>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceStorm.TopicManagerOperations_">
+            <summary>
+            A topic manager manages topics, and subscribers to topics.
+            </summary>
+        </member>
+        <member name="M:IceStorm.TopicManagerOperations_.create(System.String,Ice.Current)">
+             <summary>
+             Create a new topic.
+             The topic name must be unique.
+            
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <returns>A proxy to the topic instance.
+            
+             </returns>
+             <exception name="TopicExists">Raised if a topic with the same name already
+             exists.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicManagerOperations_.retrieve(System.String,Ice.Current)">
+             <summary>
+             Retrieve a topic by name.
+             </summary>
+             <param name="name">The name of the topic.
+            
+             </param>
+             <returns>A proxy to the topic instance.
+            
+             </returns>
+             <exception name="NoSuchTopic">Raised if the topic does not exist.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicManagerOperations_.retrieveAll(Ice.Current)">
+            <summary>
+            Retrieve all topics managed by this topic manager.
+            </summary>
+            <returns>A dictionary of string, topic proxy pairs.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceStorm.TopicManagerOperations_.getSliceChecksums(Ice.Current)">
+            <summary>
+            Returns the checksums for the IceStorm Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceStorm.FinderOperations_">
+            <summary>
+            This inferface is advertised by the IceStorm service through the
+            Ice object with the identity `IceStorm/Finder'.
+            This allows clients
+            to retrieve the topic manager with just the endpoint information of
+            the IceStorm service.
+            </summary>
+        </member>
+        <member name="M:IceStorm.FinderOperations_.getTopicManager(Ice.Current)">
+             <summary>
+             Get the topic manager proxy.
+             The proxy might point to several
+             replicas.
+            
+             </summary>
+             <returns>The topic manager proxy.</returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+    </members>
+</doc>

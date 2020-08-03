@@ -1,16 +1,22 @@
-module astock
+module com
 {
-    class CompanyInfo
+    module astock
     {
-        int id;
-        string name;
-        string addr;
+        class CompanyInfo
+        {
+            int id;
+            string name;
+            string addr;
+        }
     }
 }
-module astock
+module com
 {
-    class AStockService
+    module astock
     {
-        CompanyInfo GetCompanyInfo(int id);
+        interface AStockService
+        {
+            CompanyInfo GetCompanyInfo(int id);
+        }
     }
 }

@@ -1,0 +1,2229 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Glacier2</name>
+    </assembly>
+    <members>
+        <member name="T:Glacier2.Application">
+             <summary>
+             Utility base class that makes it easy to correctly initialize and finalize
+             the Ice run time, as well as handle signals. Unless the application specifies
+             a logger, Application installs a per-process logger that logs to the standard
+             error output.
+            
+             Applications must create a derived class that implements the {@link #run} method.
+            
+             A program can contain only one instance of this class.
+             </summary>
+        </member>
+        <member name="T:Glacier2.Application.RestartSessionException">
+            <summary>
+            This exception is raised if the session should be restarted.
+            </summary>
+        </member>
+        <member name="M:Glacier2.Application.#ctor(Ice.SignalPolicy)">
+            <summary>
+            Initializes an instance that handles signals according to the signal policy.
+            If not signal policy is provided the default SinalPolicy.HandleSignals
+            will be used, which calls Communicator.shutdown if a signal is received.
+            </summary>
+            <param name="signalPolicy">Determines how to respond to signals.</param>
+        </member>
+        <member name="M:Glacier2.Application.createSession">
+            <summary>
+            Creates a new Glacier2 session. A call to createSession always
+            precedes a call to runWithSession. If Ice.LocalException is thrown
+            from this method, the application is terminated.
+            </summary>
+            <returns> The Glacier2 session.</returns>
+        </member>
+        <member name="M:Glacier2.Application.runWithSession(System.String[])">
+             <summary>
+             Called once the communicator has been initialized and the Glacier2 session
+             has been established. A derived class must implement <code>runWithSession</code>,
+             which is the application's starting method.
+             </summary>
+             <param name="args"> The argument vector for the application. Application
+             scans the argument vector passed to <code>main</code> for options that are
+             specific to the Ice run time and removes them; therefore, the vector passed
+             to <code>runWithSession</code> is free from Ice-related options and contains
+             only options and arguments that are application-specific.</param>
+            
+             <returns> The runWithSession method should return zero for successful
+             termination, and non-zero otherwise. Application.main returns the
+             value returned by runWithSession.</returns>
+            
+        </member>
+        <member name="M:Glacier2.Application.run(System.String[])">
+            <summary>
+            Run should not be overridden for Glacier2.Application. Instead
+            runWithSession should be used.
+            </summary>
+        </member>
+        <member name="M:Glacier2.Application.sessionDestroyed">
+            <summary>
+            Called when the session refresh thread detects that the session has been
+            destroyed. A subclass can override this method to take action after the
+            loss of connectivity with the Glacier2 router. This method is called
+            according to the Ice invocation dipsatch rules (in other words, it
+            uses the same rules as an servant upcall or AMI callback).
+            </summary>
+        </member>
+        <member name="M:Glacier2.Application.restart">
+             <summary>
+             Called to restart the application's Glacier2 session. This
+             method never returns. The exception produce an application restart
+             when called from the Application main thread.
+             </summary>
+             <returns>throws RestartSessionException This exception is
+             always thrown.</returns>
+            
+        </member>
+        <member name="M:Glacier2.Application.router">
+            <summary>
+            Returns the Glacier2 router proxy.
+            </summary>
+            <returns>The router proxy.</returns>
+        </member>
+        <member name="M:Glacier2.Application.session">
+            <summary>
+            Returns the Glacier2 session proxy.
+            </summary>
+            <returns>The session proxy.</returns>
+        </member>
+        <member name="M:Glacier2.Application.categoryForClient">
+            <summary>
+            Returns the category to be used in the identities of all of the client's
+            callback objects. Clients must use this category for the router to
+            forward callback requests to the intended client.
+            Throws SessionNotExistException if no session exists.
+            </summary>
+            <returns>The category.</returns>
+        </member>
+        <member name="M:Glacier2.Application.createCallbackIdentity(System.String)">
+            <summary>
+            Create a new Ice identity for callback objects with the given
+            identity name field.
+            </summary>
+            <returns>The identity.</returns>
+        </member>
+        <member name="M:Glacier2.Application.addWithUUID(Ice.Object)">
+            <summary>
+            Adds a servant to the callback object adapter's Active Servant Map with a UUID.
+            </summary>
+            <param name="servant">The servant to add.</param>
+            <returns>The proxy for the servant.</returns>
+        </member>
+        <member name="M:Glacier2.Application.objectAdapter">
+            <summary>
+            Returns an object adapter for callback objects, creating it if necessary.
+            </summary>
+            <returns>The object adapter.</returns>
+        </member>
+        <member name="T:Glacier2.SessionCallback">
+            <summary>
+            A callback class to get notifications of status changes in the
+            Glacier2 session. All callbacks on the SessionCallback interface
+            occur in the main swing thread.
+            </summary>
+        </member>
+        <member name="M:Glacier2.SessionCallback.createdCommunicator(Glacier2.SessionHelper)">
+            <summary>
+            Notifies the application that the communicator was created.
+            </summary>
+            <param name="session">The Glacier2 session.</param>
+        </member>
+        <member name="M:Glacier2.SessionCallback.connected(Glacier2.SessionHelper)">
+            <summary>
+            Notifies the application that the Glacier2 session has
+            been established.
+            </summary>
+            <param name="session">The established session.</param>
+        </member>
+        <member name="M:Glacier2.SessionCallback.disconnected(Glacier2.SessionHelper)">
+            <summary>
+            Notifies the application that the Glacier2 session has been
+            disconnected.
+            </summary>
+            <param name="session">The disconnected session.</param>
+        </member>
+        <member name="M:Glacier2.SessionCallback.connectFailed(Glacier2.SessionHelper,System.Exception)">
+            <summary>
+            Notifies the application that the Glacier2 session
+            establishment failed.
+            </summary>
+            <param name="session">The session reporting the connection
+            failure.</param>
+            <param name="ex">The exception.</param>
+        </member>
+        <member name="T:Glacier2.SessionFactoryHelper">
+             <summary>
+             A helper class for using Glacier2 with GUI applications.
+            
+             Applications should create a session factory for each Glacier2 router to which the application will
+             connect. To connect with the Glacier2 router, call SessionFactory.connect. The callback object is
+             notified of the various life cycle events. Once the session is torn down for whatever reason, the
+             application can use the session factory to create another connection.
+             </summary>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.#ctor(Glacier2.SessionCallback)">
+            <summary>
+            Creates a SessionFactory object.
+            </summary>
+            <param name="callback">The callback object for notifications.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.#ctor(Ice.InitializationData,Glacier2.SessionCallback)">
+            <summary>
+            Creates a SessionFactory object.
+            </summary>
+            <param name="initData">The initialization data to use when creating the communicator.</param>
+            <param name="callback">The callback object for notifications.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.#ctor(Ice.Properties,Glacier2.SessionCallback)">
+            <summary>
+            Creates a SessionFactory object.
+            </summary>
+            <param name="properties">The properties to use when creating the communicator.</param>
+            <param name="callback">The callback object for notifications.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setRouterIdentity(Ice.Identity)">
+            <summary>
+            Set the router object identity.
+            </summary>
+            <param name="identity">The Glacier2 router's identity.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getRouterIdentity">
+            <summary>
+            Returns the object identity of the Glacier2 router.
+            </summary>
+            <returns> The Glacier2 router's identity.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setRouterHost(System.String)">
+            <summary>
+            Sets the host on which the Glacier2 router runs.
+            </summary>
+            <param name="hostname">The host name (or IP address) of the router host.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getRouterHost">
+            <summary>
+            Returns the host on which the Glacier2 router runs.
+            </summary>
+            <returns>The Glacier2 router host.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setSecure(System.Boolean)">
+            <summary>
+            Sets whether to connect with the Glacier2 router securely.
+            </summary>
+            <param name="secure">If true, the client connects to the router
+            via SSL; otherwise, the client connects via TCP.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getSecure">
+            <summary>
+            Returns whether the session factory will establish a secure connection to the Glacier2 router.
+            </summary>
+            <returns>The secure flag.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setProtocol(System.String)">
+            <summary>
+            Sets the protocol that will be used by the session factory to establish the connection..
+            </summary>
+            <param name="protocol">The protocol.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getProtocol">
+            <summary>
+            Returns the protocol that will be used by the session factory to establish the connection.
+            </summary>
+            <returns>The protocol.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setTimeout(System.Int32)">
+            <summary>
+            Sets the connect and connection timeout for the Glacier2 router.
+            </summary>
+            <param name="timeoutMillisecs">The timeout in milliseconds. A zero
+            or negative timeout value indicates that the router proxy has no
+            associated timeout.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getTimeout">
+            <summary>
+            Returns the connect and connection timeout associated with the Glacier2 router.
+            </summary>
+            <returns>The timeout.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setPort(System.Int32)">
+            <summary>
+            Sets the Glacier2 router port to connect to.
+            </summary>
+            <param name="port">The port. If 0, then the default port (4063 for TCP or
+            4064 for SSL) is used.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getPort">
+            <summary>
+            Returns the Glacier2 router port to connect to.
+            </summary>
+            <returns>The port.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getInitializationData">
+             Returns the initialization data used to initialize the communicator.
+            
+             @return The initialization data.
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setConnectContext(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Sets the request context to use while establishing a connection to the Glacier2 router.
+            </summary>
+            <param name="context">The request context.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.setUseCallbacks(System.Boolean)">
+            <summary>
+            Determines whether the session should create an object adapter that the client
+            can use for receiving callbacks.
+            </summary>
+            <param name="useCallbacks">True if the session should create an object adapter.</param>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.getUseCallbacks">
+            <summary>
+            Indicates whether a newly-created session will also create an object adapter that
+            the client can use for receiving callbaks.
+            </summary>
+            <returns>True if the session will create an object adapter.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.connect">
+             <summary>
+             Connects to the Glacier2 router using the associated SSL credentials.
+            
+             Once the connection is established, SesssionCallback.connected is called on
+             the callback object; upon failure, SessionCallback.connectFailed is called
+             with the exception.
+             </summary>
+             <returns>The connected session.</returns>
+        </member>
+        <member name="M:Glacier2.SessionFactoryHelper.connect(System.String,System.String)">
+             <summary>
+             Connect the Glacier2 session using user name and password credentials.
+            
+             Once the connection is established, SessionCallback.connected is called on
+             the callback object; upon failure, SessionCallback.connectFailed is called
+             with the exception.
+             </summary>
+             <param name="username">The user name.</param>
+             <param name="password">The password.</param>
+             <returns>The connected session.</returns>
+        </member>
+        <member name="T:Glacier2.SessionHelper">
+            <summary>
+            A helper class for using Glacier2 with GUI applications.
+            </summary>
+        </member>
+        <member name="M:Glacier2.SessionHelper.#ctor(Glacier2.SessionCallback,Ice.InitializationData,System.String,System.Boolean)">
+            <summary>
+            Creates a Glacier2 session.
+            </summary>
+            <param name="callback">The callback for notifications about session
+            establishment.</param>
+            <param name="initData">The Ice.InitializationData for initializing
+            the communicator.</param>
+            <param name="finderStr">The stringified Ice.RouterFinder proxy.</param>
+            <param name="useCallbacks">True if the session should create an object adapter for receiving callbacks.</param>
+        </member>
+        <member name="M:Glacier2.SessionHelper.destroy">
+             <summary>
+             Destroys the Glacier2 session.
+            
+             Once the session has been destroyed, SessionCallback.disconnected is
+             called on the associated callback object.
+             </summary>
+        </member>
+        <member name="M:Glacier2.SessionHelper.communicator">
+            <summary>
+            Returns the session's communicator object.
+            </summary>
+            <returns>The communicator.</returns>
+        </member>
+        <member name="M:Glacier2.SessionHelper.categoryForClient">
+            <summary>
+            Returns the category to be used in the identities of all of
+            the client's callback objects. Clients must use this category
+            for the router to forward callback requests to the intended
+            client.
+            </summary>
+            <returns>The category. Throws SessionNotExistException
+            No session exists</returns>
+        </member>
+        <member name="M:Glacier2.SessionHelper.addWithUUID(Ice.Object)">
+            <summary>
+            Adds a servant to the callback object adapter's Active Servant
+            Map with a UUID.
+            </summary>
+            <param name="servant">The servant to add.</param>
+            <returns>The proxy for the servant. Throws SessionNotExistException
+            if no session exists.</returns>
+        </member>
+        <member name="M:Glacier2.SessionHelper.session">
+            <summary>
+            Returns the Glacier2 session proxy, or null if the session hasn't been
+            established yet or the session has already been destroyed.
+            </summary>
+            <returns>The session proxy, or null if no session exists.</returns>
+        </member>
+        <member name="M:Glacier2.SessionHelper.isConnected">
+            <summary>
+            Returns true if there is an active session, otherwise returns false.
+            </summary>
+            <returns>true if session exists or false if no session exists.</returns>
+        </member>
+        <member name="M:Glacier2.SessionHelper.objectAdapter">
+            <summary>
+            Returns an object adapter for callback objects, creating it if necessary.
+            </summary>
+            <return>The object adapter. Throws SessionNotExistException
+            if no session exists.</return>
+        </member>
+        <member name="M:Glacier2.SessionHelper.connect(System.Collections.Generic.Dictionary{System.String,System.String})">
+             <summary>
+             Connects to the Glacier2 router using the associated SSL credentials.
+            
+             Once the connection is established, SessionCallback.connected is called on
+             the callback object; upon failure, SessionCallback.exception is called with
+             the exception.
+             </summary>
+             <param name="context">The request context to use when creating the session.</param>
+        </member>
+        <member name="M:Glacier2.SessionHelper.connect(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+             <summary>
+             Connects a Glacier2 session using user name and password credentials.
+            
+             Once the connection is established, SessionCallback.connected is called on the callback object;
+             upon failure SessionCallback.exception is called with the exception.
+             </summary>
+             <param name="username">The user name.</param>
+             <param name="password">The password.</param>
+             <param name="context">The request context to use when creating the session.</param>
+        </member>
+        <member name="T:Glacier2.PermissionDeniedException">
+            <summary>
+            This exception is raised if a client is denied the ability to create
+            a session with the router.
+            </summary>
+        </member>
+        <member name="T:Glacier2.PermissionsVerifierPrx">
+             <summary>
+             The Glacier2 permissions verifier.
+             This is called through the
+             process of establishing a session.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.PermissionsVerifierPrx.checkPermissions(System.String,System.String,System.String@,Ice.OptionalContext)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="userId">The user id for which to check permission.
+            
+             </param>
+             <param name="password">The user's password.
+            
+             </param>
+             <param name="reason">The reason why access was denied.
+            
+             </param>
+             <returns>True if access is granted, or false otherwise.
+            
+             </returns>
+             <exception name="PermissionDeniedException">Raised if the user access is
+             denied. This can be raised in place of returning false with a
+             reason set in the reason out parameter.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.PermissionsVerifierPrx.checkPermissionsAsync(System.String,System.String,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="userId">The user id for which to check permission.
+            
+             </param>
+             <param name="password">The user's password.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.PermissionsVerifierPrx.begin_checkPermissions(System.String,System.String,Ice.OptionalContext)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="userId">The user id for which to check permission.
+            
+             </param>
+             <param name="password">The user's password.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.PermissionsVerifierPrx.begin_checkPermissions(System.String,System.String,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="userId">The user id for which to check permission.
+            
+             </param>
+             <param name="password">The user's password.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.PermissionsVerifierPrx.begin_checkPermissions(System.String,System.String,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="userId">The user id for which to check permission.
+            
+             </param>
+             <param name="password">The user's password.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.PermissionsVerifierPrx.end_checkPermissions(System.String@,Ice.AsyncResult)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="reason">The reason why access was denied.
+            
+             </param>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>True if access is granted, or false otherwise.
+            
+             </returns>
+        </member>
+        <member name="T:Glacier2.SSLPermissionsVerifierPrx">
+             <summary>
+             The SSL Glacier2 permissions verifier.
+             This is called through the
+             process of establishing a session.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.SSLPermissionsVerifierPrx.authorize(Glacier2.SSLInfo,System.String@,Ice.OptionalContext)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="info">The SSL information.
+            
+             </param>
+             <param name="reason">The reason why access was denied.
+            
+             </param>
+             <returns>True if access is granted, or false otherwise.
+            
+             </returns>
+             <exception name="PermissionDeniedException">Raised if the user access is
+             denied. This can be raised in place of returning false with a
+             reason set in the reason out parameter.
+            
+             </exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SSLPermissionsVerifierPrx.authorizeAsync(Glacier2.SSLInfo,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="info">The SSL information.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SSLPermissionsVerifierPrx.begin_authorize(Glacier2.SSLInfo,Ice.OptionalContext)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="info">The SSL information.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SSLPermissionsVerifierPrx.begin_authorize(Glacier2.SSLInfo,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="info">The SSL information.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SSLPermissionsVerifierPrx.begin_authorize(Glacier2.SSLInfo,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="info">The SSL information.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SSLPermissionsVerifierPrx.end_authorize(System.String@,Ice.AsyncResult)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="reason">The reason why access was denied.
+            
+             </param>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>True if access is granted, or false otherwise.
+            
+             </returns>
+        </member>
+        <member name="T:Glacier2.PermissionsVerifierOperations_">
+             <summary>
+             The Glacier2 permissions verifier.
+             This is called through the
+             process of establishing a session.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.PermissionsVerifierOperations_.checkPermissions(System.String,System.String,System.String@,Ice.Current)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="userId">The user id for which to check permission.
+            
+             </param>
+             <param name="password">The user's password.
+            
+             </param>
+             <param name="reason">The reason why access was denied.
+            
+             </param>
+             <returns>True if access is granted, or false otherwise.
+            
+             </returns>
+             <exception name="PermissionDeniedException">Raised if the user access is
+             denied. This can be raised in place of returning false with a
+             reason set in the reason out parameter.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.SSLPermissionsVerifierOperations_">
+             <summary>
+             The SSL Glacier2 permissions verifier.
+             This is called through the
+             process of establishing a session.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.SSLPermissionsVerifierOperations_.authorize(Glacier2.SSLInfo,System.String@,Ice.Current)">
+             <summary>
+             Check whether a user has permission to access the router.
+             </summary>
+             <param name="info">The SSL information.
+            
+             </param>
+             <param name="reason">The reason why access was denied.
+            
+             </param>
+             <returns>True if access is granted, or false otherwise.
+            
+             </returns>
+             <exception name="PermissionDeniedException">Raised if the user access is
+             denied. This can be raised in place of returning false with a
+             reason set in the reason out parameter.
+            
+             </exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.SessionNotExistException">
+            <summary>
+            This exception is raised if a client tries to destroy a session
+            with a router, but no session exists for the client.
+            </summary>
+        </member>
+        <member name="T:Glacier2.RouterPrx">
+            <summary>
+            The Glacier2 specialization of the Ice::Router interface.
+            </summary>
+        </member>
+        <member name="M:Glacier2.RouterPrx.getCategoryForClient(Ice.OptionalContext)">
+             <summary>
+             This category must be used in the identities of all of the client's
+             callback objects.
+             This is necessary in order for the router to
+             forward callback requests to the intended client. If the Glacier2
+             server endpoints are not set, the returned category is an empty
+             string.
+            
+             </summary>
+             <returns>The category.</returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.getCategoryForClientAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            This category must be used in the identities of all of the client's
+            callback objects.
+            This is necessary in order for the router to
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getCategoryForClient(Ice.OptionalContext)">
+            <summary>
+            This category must be used in the identities of all of the client's
+            callback objects.
+            This is necessary in order for the router to
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getCategoryForClient(Ice.AsyncCallback,System.Object)">
+            <summary>
+            This category must be used in the identities of all of the client's
+            callback objects.
+            This is necessary in order for the router to
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getCategoryForClient(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            This category must be used in the identities of all of the client's
+            callback objects.
+            This is necessary in order for the router to
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.end_getCategoryForClient(Ice.AsyncResult)">
+            <summary>
+            This category must be used in the identities of all of the client's
+            callback objects.
+            This is necessary in order for the router to
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The category.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.createSession(System.String,System.String,Ice.OptionalContext)">
+             <summary>
+             Create a per-client session with the router.
+             If a
+             SessionManager has been installed, a proxy to a Session
+             object is returned to the client. Otherwise, null is returned
+             and only an internal session (i.e., not visible to the client)
+             is created.
+            
+             If a session proxy is returned, it must be configured to route
+             through the router that created it. This will happen automatically
+             if the router is configured as the client's default router at the
+             time the session proxy is created in the client process, otherwise
+             the client must configure the session proxy explicitly.
+            
+             </summary>
+             <returns>A proxy for the newly created session, or null if no
+             SessionManager has been installed.
+            
+             </returns>
+             <param name="userId">The user id for which to check the password.
+            
+             </param>
+             <param name="password">The password for the given user id.
+            
+             </param>
+             <exception name="PermissionDeniedException">Raised if the password for
+             the given user id is not correct, or if the user is not allowed
+             access.
+            
+             </exception>
+             <exception name="CannotCreateSessionException">Raised if the session
+             cannot be created.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.createSessionAsync(System.String,System.String,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Create a per-client session with the router.
+             If a
+             </summary>
+             <param name="userId">The user id for which to check the password.
+            
+             </param>
+             <param name="password">The password for the given user id.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_createSession(System.String,System.String,Ice.OptionalContext)">
+             <summary>
+             Create a per-client session with the router.
+             If a
+             </summary>
+             <param name="userId">The user id for which to check the password.
+            
+             </param>
+             <param name="password">The password for the given user id.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_createSession(System.String,System.String,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a per-client session with the router.
+             If a
+             </summary>
+             <param name="userId">The user id for which to check the password.
+            
+             </param>
+             <param name="password">The password for the given user id.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_createSession(System.String,System.String,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a per-client session with the router.
+             If a
+             </summary>
+             <param name="userId">The user id for which to check the password.
+            
+             </param>
+             <param name="password">The password for the given user id.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.end_createSession(Ice.AsyncResult)">
+             <summary>
+             Create a per-client session with the router.
+             If a
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A proxy for the newly created session, or null if no
+             SessionManager has been installed.
+            
+             </returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.createSessionFromSecureConnection(Ice.OptionalContext)">
+             <summary>
+             Create a per-client session with the router.
+             The user is
+             authenticated through the SSL certificates that have been
+             associated with the connection. If a SessionManager has been
+             installed, a proxy to a Session object is returned to the
+             client. Otherwise, null is returned and only an internal
+             session (i.e., not visible to the client) is created.
+            
+             If a session proxy is returned, it must be configured to route
+             through the router that created it. This will happen automatically
+             if the router is configured as the client's default router at the
+             time the session proxy is created in the client process, otherwise
+             the client must configure the session proxy explicitly.
+            
+             </summary>
+             <returns>A proxy for the newly created session, or null if no
+             SessionManager has been installed.
+            
+             </returns>
+             <exception name="PermissionDeniedException">Raised if the user cannot be
+             authenticated or if the user is not allowed access.
+            
+             </exception>
+             <exception name="CannotCreateSessionException">Raised if the session
+             cannot be created.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.createSessionFromSecureConnectionAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Create a per-client session with the router.
+            The user is
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_createSessionFromSecureConnection(Ice.OptionalContext)">
+            <summary>
+            Create a per-client session with the router.
+            The user is
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_createSessionFromSecureConnection(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Create a per-client session with the router.
+            The user is
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_createSessionFromSecureConnection(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Create a per-client session with the router.
+            The user is
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.end_createSessionFromSecureConnection(Ice.AsyncResult)">
+             <summary>
+             Create a per-client session with the router.
+             The user is
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A proxy for the newly created session, or null if no
+             SessionManager has been installed.
+            
+             </returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.refreshSession(Ice.OptionalContext)">
+            <summary>
+            Keep the calling client's session with this router alive.
+            </summary>
+            <exception name="SessionNotExistException">Raised if no session exists
+            for the calling client.</exception>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.refreshSessionAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Keep the calling client's session with this router alive.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_refreshSession(Ice.OptionalContext)">
+            <summary>
+            Keep the calling client's session with this router alive.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_refreshSession(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Keep the calling client's session with this router alive.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_refreshSession(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Keep the calling client's session with this router alive.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.end_refreshSession(Ice.AsyncResult)">
+            <summary>
+            Keep the calling client's session with this router alive.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.destroySession(Ice.OptionalContext)">
+            <summary>
+            Destroy the calling client's session with this router.
+            </summary>
+            <exception name="SessionNotExistException">Raised if no session exists
+            for the calling client.</exception>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.destroySessionAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Destroy the calling client's session with this router.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_destroySession(Ice.OptionalContext)">
+            <summary>
+            Destroy the calling client's session with this router.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_destroySession(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the calling client's session with this router.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_destroySession(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the calling client's session with this router.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.end_destroySession(Ice.AsyncResult)">
+            <summary>
+            Destroy the calling client's session with this router.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.getSessionTimeout(Ice.OptionalContext)">
+             <summary>
+             Get the value of the session timeout.
+             Sessions are destroyed
+             if they see no activity for this period of time.
+            
+             </summary>
+             <returns>The timeout (in seconds).</returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.getSessionTimeoutAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get the value of the session timeout.
+            Sessions are destroyed
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getSessionTimeout(Ice.OptionalContext)">
+            <summary>
+            Get the value of the session timeout.
+            Sessions are destroyed
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getSessionTimeout(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the value of the session timeout.
+            Sessions are destroyed
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getSessionTimeout(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the value of the session timeout.
+            Sessions are destroyed
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.end_getSessionTimeout(Ice.AsyncResult)">
+            <summary>
+            Get the value of the session timeout.
+            Sessions are destroyed
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The timeout (in seconds).</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.getACMTimeout(Ice.OptionalContext)">
+             <summary>
+             Get the value of the ACM timeout.
+             Clients supporting connection
+             heartbeats can enable them instead of explicitly sending keep
+             alives requests.
+            
+             NOTE: This method is only available since Ice 3.6.
+            
+             </summary>
+             <returns>The timeout (in seconds).</returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterPrx.getACMTimeoutAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get the value of the ACM timeout.
+            Clients supporting connection
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getACMTimeout(Ice.OptionalContext)">
+            <summary>
+            Get the value of the ACM timeout.
+            Clients supporting connection
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getACMTimeout(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the value of the ACM timeout.
+            Clients supporting connection
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.begin_getACMTimeout(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the value of the ACM timeout.
+            Clients supporting connection
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.RouterPrx.end_getACMTimeout(Ice.AsyncResult)">
+            <summary>
+            Get the value of the ACM timeout.
+            Clients supporting connection
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The timeout (in seconds).</returns>
+        </member>
+        <member name="T:Glacier2.RouterOperations_">
+            <summary>
+            The Glacier2 specialization of the Ice::Router interface.
+            </summary>
+        </member>
+        <member name="M:Glacier2.RouterOperations_.getCategoryForClient(Ice.Current)">
+             <summary>
+             This category must be used in the identities of all of the client's
+             callback objects.
+             This is necessary in order for the router to
+             forward callback requests to the intended client. If the Glacier2
+             server endpoints are not set, the returned category is an empty
+             string.
+            
+             </summary>
+             <returns>The category.</returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterOperations_.createSessionAsync(System.String,System.String,Ice.Current)">
+             <summary>
+             Create a per-client session with the router.
+             If a
+             </summary>
+             <param name="userId">The user id for which to check the password.
+            
+             </param>
+             <param name="password">The password for the given user id.
+            
+             </param>
+             <param name="current">The Current object for the invocation.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterOperations_.createSessionFromSecureConnectionAsync(Ice.Current)">
+            <summary>
+            Create a per-client session with the router.
+            The user is
+            </summary>
+            <param name="current">The Current object for the invocation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterOperations_.refreshSessionAsync(Ice.Current)">
+            <summary>
+            Keep the calling client's session with this router alive.
+            </summary>
+            <param name="current">The Current object for the invocation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.RouterOperations_.destroySession(Ice.Current)">
+            <summary>
+            Destroy the calling client's session with this router.
+            </summary>
+            <exception name="SessionNotExistException">Raised if no session exists
+            for the calling client.</exception>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterOperations_.getSessionTimeout(Ice.Current)">
+             <summary>
+             Get the value of the session timeout.
+             Sessions are destroyed
+             if they see no activity for this period of time.
+            
+             </summary>
+             <returns>The timeout (in seconds).</returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.RouterOperations_.getACMTimeout(Ice.Current)">
+             <summary>
+             Get the value of the ACM timeout.
+             Clients supporting connection
+             heartbeats can enable them instead of explicitly sending keep
+             alives requests.
+            
+             NOTE: This method is only available since Ice 3.6.
+            
+             </summary>
+             <returns>The timeout (in seconds).</returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.CannotCreateSessionException">
+            <summary>
+            This exception is raised if an attempt to create a new session failed.
+            </summary>
+        </member>
+        <member name="T:Glacier2.SessionPrx">
+            <summary>
+            A client-visible session object, which is tied to the lifecycle of a Router.
+            </summary>
+        </member>
+        <member name="M:Glacier2.SessionPrx.destroy(Ice.OptionalContext)">
+            <summary>
+            Destroy the session.
+            This is called automatically when the router is destroyed.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionPrx.destroyAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Destroy the session.
+            This is called automatically when the router is destroyed.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SessionPrx.begin_destroy(Ice.OptionalContext)">
+            <summary>
+            Destroy the session.
+            This is called automatically when the router is destroyed.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionPrx.begin_destroy(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the session.
+            This is called automatically when the router is destroyed.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionPrx.begin_destroy(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the session.
+            This is called automatically when the router is destroyed.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionPrx.end_destroy(Ice.AsyncResult)">
+            <summary>
+            Destroy the session.
+            This is called automatically when the router is destroyed.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.StringSetPrx">
+            <summary>
+            An object for managing the set of identity constraints for specific
+            parts of object identity on a
+            Session.
+            </summary>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.add(System.String[],Ice.OptionalContext)">
+             <summary>
+             Add a sequence of strings to this set of constraints.
+             Order is
+             not preserved and duplicates are implicitly removed.
+            
+             </summary>
+             <param name="additions">The sequence of strings to be added.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.addAsync(System.String[],Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Add a sequence of strings to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of strings to be added.</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_add(System.String[],Ice.OptionalContext)">
+            <summary>
+            Add a sequence of strings to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of strings to be added.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_add(System.String[],Ice.AsyncCallback,System.Object)">
+            <summary>
+            Add a sequence of strings to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of strings to be added.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_add(System.String[],Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Add a sequence of strings to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of strings to be added.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.end_add(Ice.AsyncResult)">
+            <summary>
+            Add a sequence of strings to this set of constraints.
+            Order is
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.remove(System.String[],Ice.OptionalContext)">
+             <summary>
+             Remove a sequence of strings from this set of constraints.
+             No
+             errors are returned if an entry is not found.
+            
+             </summary>
+             <param name="deletions">The sequence of strings to be removed.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.removeAsync(System.String[],Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Remove a sequence of strings from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of strings to be removed.</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_remove(System.String[],Ice.OptionalContext)">
+            <summary>
+            Remove a sequence of strings from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of strings to be removed.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_remove(System.String[],Ice.AsyncCallback,System.Object)">
+            <summary>
+            Remove a sequence of strings from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of strings to be removed.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_remove(System.String[],Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Remove a sequence of strings from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of strings to be removed.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.end_remove(Ice.AsyncResult)">
+            <summary>
+            Remove a sequence of strings from this set of constraints.
+            No
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.get(Ice.OptionalContext)">
+            <summary>
+            Returns a sequence of strings describing the constraints in this
+            set.
+            </summary>
+            <returns>The sequence of strings for this set.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.getAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Returns a sequence of strings describing the constraints in this
+            set.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_get(Ice.OptionalContext)">
+            <summary>
+            Returns a sequence of strings describing the constraints in this
+            set.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_get(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns a sequence of strings describing the constraints in this
+            set.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.begin_get(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns a sequence of strings describing the constraints in this
+            set.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.StringSetPrx.end_get(Ice.AsyncResult)">
+            <summary>
+            Returns a sequence of strings describing the constraints in this
+            set.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The sequence of strings for this set.</returns>
+        </member>
+        <member name="T:Glacier2.IdentitySetPrx">
+            <summary>
+            An object for managing the set of object identity constraints on a
+            Session.
+            </summary>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.add(Ice.Identity[],Ice.OptionalContext)">
+             <summary>
+             Add a sequence of Ice identities to this set of constraints.
+             Order is
+             not preserved and duplicates are implicitly removed.
+            
+             </summary>
+             <param name="additions">The sequence of Ice identities to be added.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.addAsync(Ice.Identity[],Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Add a sequence of Ice identities to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of Ice identities to be added.</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_add(Ice.Identity[],Ice.OptionalContext)">
+            <summary>
+            Add a sequence of Ice identities to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of Ice identities to be added.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_add(Ice.Identity[],Ice.AsyncCallback,System.Object)">
+            <summary>
+            Add a sequence of Ice identities to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of Ice identities to be added.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_add(Ice.Identity[],Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Add a sequence of Ice identities to this set of constraints.
+            Order is
+            </summary>
+            <param name="additions">The sequence of Ice identities to be added.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.end_add(Ice.AsyncResult)">
+            <summary>
+            Add a sequence of Ice identities to this set of constraints.
+            Order is
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.remove(Ice.Identity[],Ice.OptionalContext)">
+             <summary>
+             Remove a sequence of identities from this set of constraints.
+             No
+             errors are returned if an entry is not found.
+            
+             </summary>
+             <param name="deletions">The sequence of Ice identities to be removed.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.removeAsync(Ice.Identity[],Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Remove a sequence of identities from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of Ice identities to be removed.</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_remove(Ice.Identity[],Ice.OptionalContext)">
+            <summary>
+            Remove a sequence of identities from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of Ice identities to be removed.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_remove(Ice.Identity[],Ice.AsyncCallback,System.Object)">
+            <summary>
+            Remove a sequence of identities from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of Ice identities to be removed.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_remove(Ice.Identity[],Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Remove a sequence of identities from this set of constraints.
+            No
+            </summary>
+            <param name="deletions">The sequence of Ice identities to be removed.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.end_remove(Ice.AsyncResult)">
+            <summary>
+            Remove a sequence of identities from this set of constraints.
+            No
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.get(Ice.OptionalContext)">
+            <summary>
+            Returns a sequence of identities describing the constraints in this
+            set.
+            </summary>
+            <returns>The sequence of Ice identities for this set.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.getAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Returns a sequence of identities describing the constraints in this
+            set.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_get(Ice.OptionalContext)">
+            <summary>
+            Returns a sequence of identities describing the constraints in this
+            set.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_get(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns a sequence of identities describing the constraints in this
+            set.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.begin_get(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns a sequence of identities describing the constraints in this
+            set.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.IdentitySetPrx.end_get(Ice.AsyncResult)">
+            <summary>
+            Returns a sequence of identities describing the constraints in this
+            set.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The sequence of Ice identities for this set.</returns>
+        </member>
+        <member name="T:Glacier2.SessionControlPrx">
+            <summary>
+            An administrative session control object, which is tied to the
+            lifecycle of a Session.
+            </summary>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.categories(Ice.OptionalContext)">
+            <summary>
+            Access the object that manages the allowable categories
+            for object identities for this session.
+            </summary>
+            <returns>A StringSet object.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.categoriesAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Access the object that manages the allowable categories
+            for object identities for this session.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_categories(Ice.OptionalContext)">
+            <summary>
+            Access the object that manages the allowable categories
+            for object identities for this session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_categories(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Access the object that manages the allowable categories
+            for object identities for this session.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_categories(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Access the object that manages the allowable categories
+            for object identities for this session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.end_categories(Ice.AsyncResult)">
+            <summary>
+            Access the object that manages the allowable categories
+            for object identities for this session.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A StringSet object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.adapterIds(Ice.OptionalContext)">
+            <summary>
+            Access the object that manages the allowable adapter identities
+            for objects for this session.
+            </summary>
+            <returns>A StringSet object.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.adapterIdsAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Access the object that manages the allowable adapter identities
+            for objects for this session.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_adapterIds(Ice.OptionalContext)">
+            <summary>
+            Access the object that manages the allowable adapter identities
+            for objects for this session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_adapterIds(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Access the object that manages the allowable adapter identities
+            for objects for this session.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_adapterIds(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Access the object that manages the allowable adapter identities
+            for objects for this session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.end_adapterIds(Ice.AsyncResult)">
+            <summary>
+            Access the object that manages the allowable adapter identities
+            for objects for this session.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A StringSet object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.identities(Ice.OptionalContext)">
+            <summary>
+            Access the object that manages the allowable object identities
+            for this session.
+            </summary>
+            <returns>An IdentitySet object.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.identitiesAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Access the object that manages the allowable object identities
+            for this session.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_identities(Ice.OptionalContext)">
+            <summary>
+            Access the object that manages the allowable object identities
+            for this session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_identities(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Access the object that manages the allowable object identities
+            for this session.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_identities(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Access the object that manages the allowable object identities
+            for this session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.end_identities(Ice.AsyncResult)">
+            <summary>
+            Access the object that manages the allowable object identities
+            for this session.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>An IdentitySet object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.getSessionTimeout(Ice.OptionalContext)">
+            <summary>
+            Get the session timeout.
+            </summary>
+            <returns>The timeout.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.getSessionTimeoutAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Get the session timeout.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_getSessionTimeout(Ice.OptionalContext)">
+            <summary>
+            Get the session timeout.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_getSessionTimeout(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the session timeout.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_getSessionTimeout(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Get the session timeout.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.end_getSessionTimeout(Ice.AsyncResult)">
+            <summary>
+            Get the session timeout.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The timeout.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.destroy(Ice.OptionalContext)">
+            <summary>
+            Destroy the associated session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.destroyAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Destroy the associated session.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_destroy(Ice.OptionalContext)">
+            <summary>
+            Destroy the associated session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_destroy(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the associated session.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.begin_destroy(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Destroy the associated session.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionControlPrx.end_destroy(Ice.AsyncResult)">
+            <summary>
+            Destroy the associated session.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.SessionManagerPrx">
+             <summary>
+             The session manager for username/password authenticated users that
+             is responsible for managing Session objects.
+             New session objects
+             are created by the Router object calling on an application-provided
+             session manager. If no session manager is provided by the application,
+             no client-visible sessions are passed to the client.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.SessionManagerPrx.create(System.String,Glacier2.SessionControlPrx,Ice.OptionalContext)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="userId">The user id for the session.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <returns>A proxy to the newly created session.
+            
+             </returns>
+             <exception name="CannotCreateSessionException">Raised if the session
+             cannot be created.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionManagerPrx.createAsync(System.String,Glacier2.SessionControlPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="userId">The user id for the session.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SessionManagerPrx.begin_create(System.String,Glacier2.SessionControlPrx,Ice.OptionalContext)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="userId">The user id for the session.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionManagerPrx.begin_create(System.String,Glacier2.SessionControlPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="userId">The user id for the session.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionManagerPrx.begin_create(System.String,Glacier2.SessionControlPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="userId">The user id for the session.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SessionManagerPrx.end_create(Ice.AsyncResult)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A proxy to the newly created session.
+            
+             </returns>
+        </member>
+        <member name="T:Glacier2.SSLSessionManagerPrx">
+             <summary>
+             The session manager for SSL authenticated users that is
+             responsible for managing Session objects.
+             New session objects are
+             created by the Router object calling on an application-provided
+             session manager. If no session manager is provided by the
+             application, no client-visible sessions are passed to the client.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.SSLSessionManagerPrx.create(Glacier2.SSLInfo,Glacier2.SessionControlPrx,Ice.OptionalContext)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="info">The SSL info.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <returns>A proxy to the newly created session.
+            
+             </returns>
+             <exception name="CannotCreateSessionException">Raised if the session
+             cannot be created.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SSLSessionManagerPrx.createAsync(Glacier2.SSLInfo,Glacier2.SessionControlPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="info">The SSL info.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Glacier2.SSLSessionManagerPrx.begin_create(Glacier2.SSLInfo,Glacier2.SessionControlPrx,Ice.OptionalContext)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="info">The SSL info.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SSLSessionManagerPrx.begin_create(Glacier2.SSLInfo,Glacier2.SessionControlPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="info">The SSL info.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SSLSessionManagerPrx.begin_create(Glacier2.SSLInfo,Glacier2.SessionControlPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="info">The SSL info.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:Glacier2.SSLSessionManagerPrx.end_create(Ice.AsyncResult)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A proxy to the newly created session.
+            
+             </returns>
+        </member>
+        <member name="T:Glacier2.SessionOperations_">
+            <summary>
+            A client-visible session object, which is tied to the lifecycle of a Router.
+            </summary>
+        </member>
+        <member name="M:Glacier2.SessionOperations_.destroy(Ice.Current)">
+            <summary>
+            Destroy the session.
+            This is called automatically when the router is destroyed.
+            </summary>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.StringSetOperations_">
+            <summary>
+            An object for managing the set of identity constraints for specific
+            parts of object identity on a
+            Session.
+            </summary>
+        </member>
+        <member name="M:Glacier2.StringSetOperations_.add(System.String[],Ice.Current)">
+             <summary>
+             Add a sequence of strings to this set of constraints.
+             Order is
+             not preserved and duplicates are implicitly removed.
+            
+             </summary>
+             <param name="additions">The sequence of strings to be added.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.StringSetOperations_.remove(System.String[],Ice.Current)">
+             <summary>
+             Remove a sequence of strings from this set of constraints.
+             No
+             errors are returned if an entry is not found.
+            
+             </summary>
+             <param name="deletions">The sequence of strings to be removed.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.StringSetOperations_.get(Ice.Current)">
+            <summary>
+            Returns a sequence of strings describing the constraints in this
+            set.
+            </summary>
+            <returns>The sequence of strings for this set.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.IdentitySetOperations_">
+            <summary>
+            An object for managing the set of object identity constraints on a
+            Session.
+            </summary>
+        </member>
+        <member name="M:Glacier2.IdentitySetOperations_.add(Ice.Identity[],Ice.Current)">
+             <summary>
+             Add a sequence of Ice identities to this set of constraints.
+             Order is
+             not preserved and duplicates are implicitly removed.
+            
+             </summary>
+             <param name="additions">The sequence of Ice identities to be added.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.IdentitySetOperations_.remove(Ice.Identity[],Ice.Current)">
+             <summary>
+             Remove a sequence of identities from this set of constraints.
+             No
+             errors are returned if an entry is not found.
+            
+             </summary>
+             <param name="deletions">The sequence of Ice identities to be removed.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.IdentitySetOperations_.get(Ice.Current)">
+            <summary>
+            Returns a sequence of identities describing the constraints in this
+            set.
+            </summary>
+            <returns>The sequence of Ice identities for this set.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.SessionControlOperations_">
+            <summary>
+            An administrative session control object, which is tied to the
+            lifecycle of a Session.
+            </summary>
+        </member>
+        <member name="M:Glacier2.SessionControlOperations_.categories(Ice.Current)">
+            <summary>
+            Access the object that manages the allowable categories
+            for object identities for this session.
+            </summary>
+            <returns>A StringSet object.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlOperations_.adapterIds(Ice.Current)">
+            <summary>
+            Access the object that manages the allowable adapter identities
+            for objects for this session.
+            </summary>
+            <returns>A StringSet object.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlOperations_.identities(Ice.Current)">
+            <summary>
+            Access the object that manages the allowable object identities
+            for this session.
+            </summary>
+            <returns>An IdentitySet object.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlOperations_.getSessionTimeout(Ice.Current)">
+            <summary>
+            Get the session timeout.
+            </summary>
+            <returns>The timeout.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:Glacier2.SessionControlOperations_.destroy(Ice.Current)">
+            <summary>
+            Destroy the associated session.
+            </summary>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.SessionManagerOperations_">
+             <summary>
+             The session manager for username/password authenticated users that
+             is responsible for managing Session objects.
+             New session objects
+             are created by the Router object calling on an application-provided
+             session manager. If no session manager is provided by the application,
+             no client-visible sessions are passed to the client.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.SessionManagerOperations_.create(System.String,Glacier2.SessionControlPrx,Ice.Current)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="userId">The user id for the session.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <returns>A proxy to the newly created session.
+            
+             </returns>
+             <exception name="CannotCreateSessionException">Raised if the session
+             cannot be created.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:Glacier2.SSLSessionManagerOperations_">
+             <summary>
+             The session manager for SSL authenticated users that is
+             responsible for managing Session objects.
+             New session objects are
+             created by the Router object calling on an application-provided
+             session manager. If no session manager is provided by the
+             application, no client-visible sessions are passed to the client.
+            
+             </summary>
+        </member>
+        <member name="M:Glacier2.SSLSessionManagerOperations_.create(Glacier2.SSLInfo,Glacier2.SessionControlPrx,Ice.Current)">
+             <summary>
+             Create a new session.
+             </summary>
+             <param name="info">The SSL info.
+            
+             </param>
+             <param name="control">A proxy to the session control object.
+            
+             </param>
+             <returns>A proxy to the newly created session.
+            
+             </returns>
+             <exception name="CannotCreateSessionException">Raised if the session
+             cannot be created.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+    </members>
+</doc>

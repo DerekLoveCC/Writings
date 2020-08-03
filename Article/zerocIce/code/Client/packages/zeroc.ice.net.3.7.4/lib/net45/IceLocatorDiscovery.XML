@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IceLocatorDiscovery</name>
+    </assembly>
+    <members>
+        <member name="T:IceLocatorDiscovery.LookupReplyPrx">
+             <summary>
+             The Ice lookup reply interface must be implemented by clients which
+             are searching for Ice locators.
+             Ice locator implementations invoke
+             on this interface to provide their locator proxy.
+            
+             </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrx.foundLocator(Ice.LocatorPrx,Ice.OptionalContext)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrx.foundLocatorAsync(Ice.LocatorPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrx.begin_foundLocator(Ice.LocatorPrx,Ice.OptionalContext)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrx.begin_foundLocator(Ice.LocatorPrx,Ice.AsyncCallback,System.Object)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrx.begin_foundLocator(Ice.LocatorPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrx.end_foundLocator(Ice.AsyncResult)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupPrx">
+             <summary>
+             The Ice lookup interface is implemented by Ice locator
+             implementations and can be used by clients to find available Ice
+             locators on the network.
+             Ice locator implementations provide a well-known `Ice/LocatorLookup'
+             object accessible through UDP multicast. Clients typically make a
+             multicast findLocator request to find the locator proxy.
+            
+             </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrx.findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,Ice.OptionalContext)">
+             <summary>
+             Find a locator proxy with the given instance name.
+             </summary>
+             <param name="instanceName">Restrict the search to Ice registries
+             configured with the given instance name. If empty, all the
+             available registries will reply.
+            
+             </param>
+             <param name="reply">The reply object to use to send the reply.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrx.findLocatorAsync(System.String,IceLocatorDiscovery.LookupReplyPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Find a locator proxy with the given instance name.
+             </summary>
+             <param name="instanceName">Restrict the search to Ice registries
+             configured with the given instance name. If empty, all the
+             available registries will reply.
+            
+             </param>
+             <param name="reply">The reply object to use to send the reply.</param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrx.begin_findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,Ice.OptionalContext)">
+             <summary>
+             Find a locator proxy with the given instance name.
+             </summary>
+             <param name="instanceName">Restrict the search to Ice registries
+             configured with the given instance name. If empty, all the
+             available registries will reply.
+            
+             </param>
+             <param name="reply">The reply object to use to send the reply.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrx.begin_findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Find a locator proxy with the given instance name.
+             </summary>
+             <param name="instanceName">Restrict the search to Ice registries
+             configured with the given instance name. If empty, all the
+             available registries will reply.
+            
+             </param>
+             <param name="reply">The reply object to use to send the reply.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrx.begin_findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Find a locator proxy with the given instance name.
+             </summary>
+             <param name="instanceName">Restrict the search to Ice registries
+             configured with the given instance name. If empty, all the
+             available registries will reply.
+            
+             </param>
+             <param name="reply">The reply object to use to send the reply.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrx.end_findLocator(Ice.AsyncResult)">
+            <summary>
+            Find a locator proxy with the given instance name.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupReplyOperations_">
+             <summary>
+             The Ice lookup reply interface must be implemented by clients which
+             are searching for Ice locators.
+             Ice locator implementations invoke
+             on this interface to provide their locator proxy.
+            
+             </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyOperations_.foundLocator(Ice.LocatorPrx,Ice.Current)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupOperations_">
+             <summary>
+             The Ice lookup interface is implemented by Ice locator
+             implementations and can be used by clients to find available Ice
+             locators on the network.
+             Ice locator implementations provide a well-known `Ice/LocatorLookup'
+             object accessible through UDP multicast. Clients typically make a
+             multicast findLocator request to find the locator proxy.
+            
+             </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupOperations_.findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,Ice.Current)">
+             <summary>
+             Find a locator proxy with the given instance name.
+             </summary>
+             <param name="instanceName">Restrict the search to Ice registries
+             configured with the given instance name. If empty, all the
+             available registries will reply.
+            
+             </param>
+             <param name="reply">The reply object to use to send the reply.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+    </members>
+</doc>

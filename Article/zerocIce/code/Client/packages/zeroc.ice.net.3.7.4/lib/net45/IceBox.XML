@@ -1,0 +1,520 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IceBox</name>
+    </assembly>
+    <members>
+        <member name="T:IceBox.FailureException">
+            <summary>
+            This exception is a general failure notification.
+            It is thrown
+            for errors such as a service encountering an error during
+            initialization, or the service manager being unable
+            to load a service executable.
+            </summary>
+        </member>
+        <member name="T:IceBox.AlreadyStartedException">
+            <summary>
+            This exception is thrown if an attempt is made to start an
+            already-started service.
+            </summary>
+        </member>
+        <member name="T:IceBox.AlreadyStoppedException">
+            <summary>
+            This exception is thrown if an attempt is made to stop an
+            already-stopped service.
+            </summary>
+        </member>
+        <member name="T:IceBox.NoSuchServiceException">
+            <summary>
+            This exception is thrown if a service name does not refer
+            to an existing service.
+            </summary>
+        </member>
+        <member name="M:IceBox.Service.start(System.String,Ice.Communicator,System.String[])">
+             <summary>
+             Start the service.
+             The given communicator is created by the
+             ServiceManager for use by the service. This communicator may
+             also be used by other services, depending on the service
+             configuration.
+            
+             The ServiceManager owns this communicator, and is
+             responsible for destroying it.
+            
+             </summary>
+             <param name="name">The service's name, as determined by the
+             configuration.
+            
+             </param>
+             <param name="communicator">A communicator for use by the service.
+            
+             </param>
+             <param name="args">The service arguments that were not converted into
+             properties.
+            
+             </param>
+             <exception name="FailureException">Raised if start failed.</exception>
+        </member>
+        <member name="M:IceBox.Service.stop">
+            <summary>
+            Stop the service.
+            </summary>
+        </member>
+        <member name="T:IceBox.ServiceObserverPrx">
+            <summary>
+            An Observer interface implemented by admin clients interested in the status
+            of services.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.servicesStarted(System.String[],Ice.OptionalContext)">
+            <summary>
+            Receives the names of the services that were started.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.servicesStartedAsync(System.String[],Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Receives the names of the services that were started.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.begin_servicesStarted(System.String[],Ice.OptionalContext)">
+            <summary>
+            Receives the names of the services that were started.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.begin_servicesStarted(System.String[],Ice.AsyncCallback,System.Object)">
+            <summary>
+            Receives the names of the services that were started.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.begin_servicesStarted(System.String[],Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Receives the names of the services that were started.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.end_servicesStarted(Ice.AsyncResult)">
+            <summary>
+            Receives the names of the services that were started.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.servicesStopped(System.String[],Ice.OptionalContext)">
+            <summary>
+            Receives the names of the services that were stopped.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.servicesStoppedAsync(System.String[],Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Receives the names of the services that were stopped.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.begin_servicesStopped(System.String[],Ice.OptionalContext)">
+            <summary>
+            Receives the names of the services that were stopped.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.begin_servicesStopped(System.String[],Ice.AsyncCallback,System.Object)">
+            <summary>
+            Receives the names of the services that were stopped.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.begin_servicesStopped(System.String[],Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Receives the names of the services that were stopped.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceObserverPrx.end_servicesStopped(Ice.AsyncResult)">
+            <summary>
+            Receives the names of the services that were stopped.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:IceBox.ServiceManagerPrx">
+            <summary>
+            Administers a set of Service instances.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.getSliceChecksums(Ice.OptionalContext)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.getSliceChecksumsAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_getSliceChecksums(Ice.OptionalContext)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_getSliceChecksums(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_getSliceChecksums(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.end_getSliceChecksums(Ice.AsyncResult)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.startService(System.String,Ice.OptionalContext)">
+             <summary>
+             Start an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <exception name="AlreadyStartedException">If the service is already running.
+             </exception>
+             <exception name="NoSuchServiceException">If no service could be found with the given name.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.startServiceAsync(System.String,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Start an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_startService(System.String,Ice.OptionalContext)">
+             <summary>
+             Start an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_startService(System.String,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Start an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_startService(System.String,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Start an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.end_startService(Ice.AsyncResult)">
+            <summary>
+            Start an individual service.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.stopService(System.String,Ice.OptionalContext)">
+             <summary>
+             Stop an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <exception name="AlreadyStoppedException">If the service is already stopped.
+             </exception>
+             <exception name="NoSuchServiceException">If no service could be found with the given name.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.stopServiceAsync(System.String,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Stop an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_stopService(System.String,Ice.OptionalContext)">
+             <summary>
+             Stop an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_stopService(System.String,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Stop an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_stopService(System.String,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Stop an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.end_stopService(Ice.AsyncResult)">
+            <summary>
+            Stop an individual service.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.addObserver(IceBox.ServiceObserverPrx,Ice.OptionalContext)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.addObserverAsync(IceBox.ServiceObserverPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_addObserver(IceBox.ServiceObserverPrx,Ice.OptionalContext)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_addObserver(IceBox.ServiceObserverPrx,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_addObserver(IceBox.ServiceObserverPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.end_addObserver(Ice.AsyncResult)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.shutdown(Ice.OptionalContext)">
+            <summary>
+            Shut down all services.
+            This causes stop to be invoked on all configured services.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.shutdownAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Shut down all services.
+            This causes stop to be invoked on all configured services.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_shutdown(Ice.OptionalContext)">
+            <summary>
+            Shut down all services.
+            This causes stop to be invoked on all configured services.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_shutdown(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Shut down all services.
+            This causes stop to be invoked on all configured services.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.begin_shutdown(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Shut down all services.
+            This causes stop to be invoked on all configured services.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrx.end_shutdown(Ice.AsyncResult)">
+            <summary>
+            Shut down all services.
+            This causes stop to be invoked on all configured services.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:IceBox.ServiceObserverOperations_">
+            <summary>
+            An Observer interface implemented by admin clients interested in the status
+            of services.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceObserverOperations_.servicesStarted(System.String[],Ice.Current)">
+            <summary>
+            Receives the names of the services that were started.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceObserverOperations_.servicesStopped(System.String[],Ice.Current)">
+            <summary>
+            Receives the names of the services that were stopped.
+            </summary>
+            <param name="services">The names of the services.</param>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceBox.ServiceManagerOperations_">
+            <summary>
+            Administers a set of Service instances.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.getSliceChecksums(Ice.Current)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.startService(System.String,Ice.Current)">
+             <summary>
+             Start an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <exception name="AlreadyStartedException">If the service is already running.
+             </exception>
+             <exception name="NoSuchServiceException">If no service could be found with the given name.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.stopService(System.String,Ice.Current)">
+             <summary>
+             Stop an individual service.
+             </summary>
+             <param name="service">The service name.
+            
+             </param>
+             <exception name="AlreadyStoppedException">If the service is already stopped.
+             </exception>
+             <exception name="NoSuchServiceException">If no service could be found with the given name.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.addObserver(IceBox.ServiceObserverPrx,Ice.Current)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.shutdown(Ice.Current)">
+            <summary>
+            Shut down all services.
+            This causes stop to be invoked on all configured services.
+            </summary>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+    </members>
+</doc>

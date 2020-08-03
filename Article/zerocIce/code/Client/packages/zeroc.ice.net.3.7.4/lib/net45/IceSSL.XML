@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IceSSL</name>
+    </assembly>
+    <members>
+        <member name="T:IceSSL.PasswordCallback">
+            <summary>
+            A password callback is an alternate way of supplying the plug-in with
+            passwords; this avoids using plain text configuration properties.
+            </summary>
+        </member>
+        <member name="M:IceSSL.PasswordCallback.getPassword(System.String)">
+            <summary>
+            Obtain the password necessary to access the private key associated with
+            the certificate in the given file.
+            <param name="file">The certificate file name.</param>
+            <returns>The password for the key or null, if no password is necessary.</returns>
+            </summary>
+        </member>
+        <member name="M:IceSSL.PasswordCallback.getImportPassword(System.String)">
+            <summary>
+            Obtain a password for a certificate being imported via an IceSSL.ImportCert
+            property. Return null if no password is necessary.
+            </summary>
+            <param name="file">The certificate file name.</param>
+            <returns>The password for the key or null, if no password is necessary.</returns>
+        </member>
+        <member name="T:IceSSL.Plugin">
+            <summary>
+            Interface that allows applications to interact with the IceSSL plug-in.
+            </summary>
+        </member>
+        <member name="M:IceSSL.Plugin.setCACertificates(System.Security.Cryptography.X509Certificates.X509Certificate2Collection)">
+            <summary>
+            Specify the certificate authorities certificates to use
+            when validating SSL peer certificates. This must be done
+            before the plug-in is initialized; therefore, the application
+            must define the property Ice.InitPlugins=0, set the certificates,
+            and finally invoke initializePlugins on the PluginManager.
+            When the application supplies its own certificate authorities
+            certificates, the plug-in skips its normal property-based
+            configuration.
+            </summary>
+            <param name="certs">The certificate authorities certificates to use.</param>
+        </member>
+        <member name="M:IceSSL.Plugin.setCertificates(System.Security.Cryptography.X509Certificates.X509Certificate2Collection)">
+            <summary>
+            Specify the certificates to use for SSL connections. This
+            must be done before the plug-in is initialized; therefore,
+            the application must define the property Ice.InitPlugins=0,
+            set the certificates, and finally invoke initializePlugins
+            on the PluginManager.
+            When the application supplies its own certificates, the
+            plug-in skips its normal property-based configuration.
+            </summary>
+            <param name="certs">The certificates to use for SSL connections.</param>
+        </member>
+        <member name="M:IceSSL.Plugin.setCertificateVerifier(IceSSL.CertificateVerifier)">
+            <summary>
+            Establish the certificate verifier object. This must be
+            done before any connections are established.
+            </summary>
+            <param name="verifier">The certificate verifier.</param>
+        </member>
+        <member name="M:IceSSL.Plugin.getCertificateVerifier">
+            <summary>
+            Obtain the certificate verifier object.
+            </summary>
+            <returns>The certificate verifier (null if not set).</returns>
+        </member>
+        <member name="M:IceSSL.Plugin.setPasswordCallback(IceSSL.PasswordCallback)">
+            <summary>
+            Establish the password callback object. This must be
+            done before the plug-in is initialized.
+            </summary>
+            <param name="callback">The password callback.</param>
+        </member>
+        <member name="M:IceSSL.Plugin.getPasswordCallback">
+            <summary>
+            Returns the password callback.
+            </summary>
+            <returns>The password callback (null if not set).</returns>
+        </member>
+        <member name="M:IceSSL.Plugin.destroy">
+            <summary>
+            This method is for internal use.
+            </summary>
+        </member>
+        <member name="T:IceSSL.PluginFactory">
+            <summary>
+            Plug-in factories must implement this interface.
+            </summary>
+        </member>
+        <member name="M:IceSSL.PluginFactory.create(Ice.Communicator,System.String,System.String[])">
+             <summary>
+             Returns a new plug-in.
+             </summary>
+             <param name="communicator">The communicator for the plug-in.</param>
+             <param name="name">The name of the plug-in.</param>
+             <param name="args">The arguments that are specified in the plug-in's configuration.</param>
+            
+             <returns>The new plug-in. null can be returned to indicate
+             that a general error occurred. Alternatively, create can throw
+             PluginInitializationException to provide more detailed information.</returns>
+        </member>
+    </members>
+</doc>

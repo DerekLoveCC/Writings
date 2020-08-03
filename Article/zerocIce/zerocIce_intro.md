@@ -7,7 +7,7 @@
 ### 架构和基本概念
 >先上一张从ZeroC官方网站上截的图：
 
-![ZeroC Ice Arch]("../image/arch.png")
+![ZeroC Ice Arch](https://img2020.cnblogs.com/blog/498574/202008/498574-20200804005502541-687998359.png)
 
 >从图中可以看出，使用Ice的程序分为客户端和服务器端，而两端的代码都由以下三部分组成：
 1. 应用程序代码，这是由使用者编写的部分
@@ -23,33 +23,136 @@
 * Proxy：代表Ice Object，client使用proxy来和server交互
 * Ice Object Adapter：存在服务端的communicator中，负责Ice运行时和Server端应用代码的交互，它会和一个或多个Endpoint绑定并接收client端的请求，然后把请求转给对应的Servant从而执行应用代码
 
-https://zeroc.com/download/Ice/3.7/Ice-3.7.4.msi
-
 ### 使用方法
 
 >在了解了Ice的结构和基本概念之后，让我们动手写个demo看看具体怎么使用吧。为了体现Ice的跨语言和跨平台功能，我们这里用Java实现server端，用C#实现client端。程序的主要功能：client可以通过向sever发送A股的股票代码来获得其对应公司的详细信息， 下面我们一起看看具体的步骤。（注：这里的公司信息都是dummy的）
 
-1. 定义client和service交互接口，这里我们定义两个class：CompanyInfo和AStockService：
+1. 下载并安装Ice
+   >从 https://zeroc.com/download/Ice/3.7/Ice-3.7.4.msi 下载Ice 3.7.4并安装，笔者把它安装在了D:\Program Files下面，打开D:\Program FilesZeroC\Ice-3.7.4\bin文件夹，我们可以看到有名为slice2java.exe, slice2cs.exe的程序，这些就是用来自动生成Java和C#代码的，我们在下面会用到。除了Java和C#的代码生成器，还有许多其他语言的，如：cpp, php等等
+![install dir](https://img2020.cnblogs.com/blog/498574/202008/498574-20200804005631596-1121223076.png)
+
+2. 定义client和service的交互接口：这里我们定义两个class：CompanyInfo和AStockService：
+   
+``` java
+   module com
+   {
+      module astock
+      {
+          class CompanyInfo
+          {
+              int id;
+              string name;
+              string addr;
+          }
+      }
+  }
+
+  module com
+  {
+      module astock
+      {
+          interface AStockService
+          {
+              CompanyInfo GetCompanyInfo(int id);
+          }
+      }
+  }   
+```
+
+3. 使用1中的工具把2中定义的类生成C#和Java对应的代码
+   > 打开cmd,执行下图中的命令，通过执行slice2java和slice2cs程序，我生成了如下图所示的代码，其中C# code只有一个文件，而Java code有四个文件
+![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200804005724792-1862506735.png)
+
+4. 生成Code的简单介绍
+   > C#虽然只有一个文件，但是里面包含了三个接口，三个类，一个委托，如下图：
+![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200804005842929-1895117817.png)
+   * AStockServiceOperations_接口：包含了我们定义的操作即GetCompanyInfo
+   * AStockService接口：我们定义的接口，它继承自AStockServiceOperations_
+   * AStockServicePrx接口：客户端代理接口
+   * CompanyInfo类： 用于传递数据的DTO
+   * AStockServiceDisp_类： 服务端的dispatch抽象类，即上文中说到的skeleton，它实现了我们定义的接口AStockService
+   * AStockServicePrxHelper： 客户端的代理类，它实现了AStockServicePrx接口
+
+   > Java的code生成了两个类，两个接口
+   * AStockService接口：我们定义的接口，也是服务端的skeleton
+   * AStockServicePrx接口：客户端代理接口
+   * CompanyInfo类： 用于传递数据的DTO
+   * _AStockServicePrxI类：客户端代理类
+
+5. 编写服务端代码
+   >用熟悉的IDE新建一个工程，笔者使用的Intelij Idea,把上面生成的Java代码加到项目中，并添加Ice的Maven依赖，如下图所示，当然也可以手动下载ice jar包，并手动添加。
+![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200804005929215-996068789.png)
+
+
+   下面创建一个类AStockServiceServer，实现AStockService接口，其GetCompanyInfo方法返回一个dummy CompanyInfo对象，如下所示
    
    ``` java
-   module astock
-   {
-       class CompanyInfo
-       {
-           int id;
-           string name;
-           string addr;
-       }
-   }
-   module astock
-   {
-       class AStockService
-       {
-           CompanyInfo GetCompanyInfo(int id);
-       }
-   }
+   
+    public class AStockServiceServer implements AStockService {
+        @Override
+        public CompanyInfo GetCompanyInfo(int id, Current current) {
+            CompanyInfo info = new CompanyInfo();
+            info.id = 1234;
+            info.name = "中国平安";
+            info.addr = "深圳";
+            return info;
+        }
+    }
+
    ```
 
+   >创建包含main的class AStockServiceServerMain，如下所示:
+   
+```java
+    public class AStockServiceServerMain {
+        public static void main(String[] args) {
+            try (Communicator communicator = Util.initialize()) {//创建communicator
+            ObjectAdapter oa = communicator.createObjectAdapterWithEndpoints("AStockServiceAdapter", "default -p 10000");//创建一个Adatper，Id是AStockServiceAdapter，绑定到10000端口
+
+            AStockServiceServer servant = new AStockServiceServer();//我们的服务
+            oa.add(servant, Util.stringToIdentity("AStockService"));//把我们创建的服务加到上面创建的adapter里
+            oa.activate();//激活adapter
+            System.out.println("AStock Service Server is running");//输出启动log
+            communicator.waitForShutdown();//等待结束
+        }
+    }
+}
+```
+
+6. 编写客户端代码
+   >用VS新建一个控制台程序，并把上面生成的C#代码加入项目中，然后添加Ice的nuget包，如下图所示：
+![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200804010000246-1545202394.png)
+
+
+   >在main函数中编写如下代码：
+
+```java
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            using (var communicator = Util.initialize(ref args))//创建Communicator对象
+            {
+                ObjectPrx basePrx = communicator.stringToProxy("AStockService:default -p 10000");//创建客户端基类代理
+
+                AStockServicePrx aStockServicePrx = AStockServicePrxHelper.checkedCast(basePrx);//把基类代理转换为子类代理
+                var companyInfo = aStockServicePrx.GetCompanyInfo(1000);//调用GetCompanyInfo方法
+
+                Console.WriteLine($"id:{companyInfo.id} name:{companyInfo.name} addr:{companyInfo.addr}");//输出返回结果
+            }
+        }
+    }
+
+```
+
+7. 联调
+>先运行Java服务端，然后再启动C#程序可以得到如下结果，可以看到Client端成功的获取到了CompanyInfo对象。
+![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200804010018014-404661481.png)
+
+
+### 总结
+>本文介绍了ZeroC Ice的概念并用一个demo详细说明了具体使用方法，期望对读者能够有所帮助
 
 
 ![Fintech技术汇](https://img2020.cnblogs.com/blog/498574/202008/498574-20200801213206265-563825556.jpg)

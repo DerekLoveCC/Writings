@@ -1,0 +1,628 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IcePatch2</name>
+    </assembly>
+    <members>
+        <member name="T:IcePatch2.PartitionOutOfRangeException">
+            <summary>
+            A partition argument was not in the range 0-255.
+            </summary>
+        </member>
+        <member name="T:IcePatch2.FileAccessException">
+            <summary>
+            This exception is raised if a file's contents cannot be read.
+            </summary>
+        </member>
+        <member name="T:IcePatch2.FileSizeRangeException">
+            <summary>
+            This exception is raised if an operation tries to use a file whose size is
+            larger than 2.1 GB.
+            Use the "large" versions of the operations instead.
+            </summary>
+        </member>
+        <member name="T:IcePatch2.FileServerPrx">
+            <summary>
+            The interface that provides access to files.
+            </summary>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getFileInfoSeq(System.Int32,Ice.OptionalContext)">
+             <summary>
+             Return file information for the specified partition.
+            
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+            
+              This operation is deprecated and only present for
+             compatibility with old Ice clients (older than version 3.6).
+            
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <returns>A sequence containing information about the files in the
+             specified partition.
+            
+             </returns>
+             <exception name="PartitionOutOfRangeException">If the partition number is out of range.
+             </exception>
+             <exception name="FileSizeRangeException">If a file is larger than 2.1GB.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getFileInfoSeqAsync(System.Int32,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Return file information for the specified partition.
+              This operation is deprecated and only present for
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getFileInfoSeq(System.Int32,Ice.OptionalContext)">
+             <summary>
+             Return file information for the specified partition.
+              This operation is deprecated and only present for
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getFileInfoSeq(System.Int32,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Return file information for the specified partition.
+              This operation is deprecated and only present for
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getFileInfoSeq(System.Int32,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Return file information for the specified partition.
+              This operation is deprecated and only present for
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.end_getFileInfoSeq(Ice.AsyncResult)">
+             <summary>
+             Return file information for the specified partition.
+              This operation is deprecated and only present for
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A sequence containing information about the files in the
+             specified partition.
+            
+             </returns>
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getLargeFileInfoSeq(System.Int32,Ice.OptionalContext)">
+             <summary>
+             Returns file information for the specified partition.
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <returns>A sequence containing information about the files in the
+             specified partition.
+            
+             </returns>
+             <exception name="PartitionOutOfRangeException">If the partition number is out of range.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getLargeFileInfoSeqAsync(System.Int32,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Returns file information for the specified partition.
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getLargeFileInfoSeq(System.Int32,Ice.OptionalContext)">
+             <summary>
+             Returns file information for the specified partition.
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getLargeFileInfoSeq(System.Int32,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Returns file information for the specified partition.
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getLargeFileInfoSeq(System.Int32,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Returns file information for the specified partition.
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.end_getLargeFileInfoSeq(Ice.AsyncResult)">
+             <summary>
+             Returns file information for the specified partition.
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A sequence containing information about the files in the
+             specified partition.
+            
+             </returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getChecksumSeq(Ice.OptionalContext)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <returns>A sequence containing 256 checksums. Partitions with a
+            checksum that differs from the previous checksum for the same
+            partition contain updated files. Partitions with a checksum
+            that is identical to the previous checksum do not contain
+            updated files.</returns>
+            <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getChecksumSeqAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getChecksumSeq(Ice.OptionalContext)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getChecksumSeq(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getChecksumSeq(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.end_getChecksumSeq(Ice.AsyncResult)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>A sequence containing 256 checksums. Partitions with a
+            checksum that differs from the previous checksum for the same
+            partition contain updated files. Partitions with a checksum
+            that is identical to the previous checksum do not contain
+            updated files.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getChecksum(Ice.OptionalContext)">
+             <summary>
+             Return the master checksum for all partitions.
+             If this checksum is the same
+             as for a previous run, the entire file set is up-to-date.
+            
+             </summary>
+             <returns>The master checksum for the file set.</returns>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getChecksumAsync(Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            </summary>
+            <param name="context">Context map to send with the invocation.</param>
+            <param name="progress">Sent progress provider.</param>
+            <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getChecksum(Ice.OptionalContext)">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getChecksum(Ice.AsyncCallback,System.Object)">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            </summary>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getChecksum(Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            </summary>
+            <param name="context">The Context map to send with the invocation.</param>
+            <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+            <param name="cookie">Application data to store in the asynchronous result object.</param>
+            <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.end_getChecksum(Ice.AsyncResult)">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+            <returns>The master checksum for the file set.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getFileCompressed(System.String,System.Int32,System.Int32,Ice.OptionalContext)">
+             <summary>
+             Read the specified file.
+            
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+            
+             This operation may only return fewer bytes than requested
+             in case there was an end-of-file condition.
+            
+              This operation is deprecated and only present for
+             compatibility with old Ice clients (older than version 3.6).
+            
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <returns>A sequence containing the compressed file contents.
+            
+             </returns>
+             <exception name="FileAccessException">If an error occurred while trying to read the file.
+             </exception>
+             <exception name="FileSizeRangeException">If a file is larger than 2.1GB.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getFileCompressedAsync(System.String,System.Int32,System.Int32,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getFileCompressed(System.String,System.Int32,System.Int32,Ice.OptionalContext)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getFileCompressed(System.String,System.Int32,System.Int32,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getFileCompressed(System.String,System.Int32,System.Int32,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.end_getFileCompressed(Ice.AsyncResult)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A sequence containing the compressed file contents.
+            
+             </returns>
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getLargeFileCompressed(System.String,System.Int64,System.Int32,Ice.OptionalContext)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             in case there was an end-of-file condition.
+            
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <returns>A sequence containing the compressed file contents.
+            
+             </returns>
+             <exception name="FileAccessException">If an error occurred while trying to read the file.</exception>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.getLargeFileCompressedAsync(System.String,System.Int64,System.Int32,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getLargeFileCompressed(System.String,System.Int64,System.Int32,Ice.OptionalContext)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getLargeFileCompressed(System.String,System.Int64,System.Int32,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.begin_getLargeFileCompressed(System.String,System.Int64,System.Int32,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrx.end_getLargeFileCompressed(Ice.AsyncResult)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="asyncResult">The asynchronous result object for the invocation.</param>
+             <returns>A sequence containing the compressed file contents.
+            
+             </returns>
+        </member>
+        <member name="T:IcePatch2.FileServerOperations_">
+            <summary>
+            The interface that provides access to files.
+            </summary>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getFileInfoSeq(System.Int32,Ice.Current)">
+             <summary>
+             Return file information for the specified partition.
+            
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+            
+              This operation is deprecated and only present for
+             compatibility with old Ice clients (older than version 3.6).
+            
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <returns>A sequence containing information about the files in the
+             specified partition.
+            
+             </returns>
+             <exception name="PartitionOutOfRangeException">If the partition number is out of range.
+             </exception>
+             <exception name="FileSizeRangeException">If a file is larger than 2.1GB.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getLargeFileInfoSeq(System.Int32,Ice.Current)">
+             <summary>
+             Returns file information for the specified partition.
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+            
+             </param>
+             <returns>A sequence containing information about the files in the
+             specified partition.
+            
+             </returns>
+             <exception name="PartitionOutOfRangeException">If the partition number is out of range.</exception>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getChecksumSeq(Ice.Current)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <returns>A sequence containing 256 checksums. Partitions with a
+            checksum that differs from the previous checksum for the same
+            partition contain updated files. Partitions with a checksum
+            that is identical to the previous checksum do not contain
+            updated files.</returns>
+            <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getChecksum(Ice.Current)">
+             <summary>
+             Return the master checksum for all partitions.
+             If this checksum is the same
+             as for a previous run, the entire file set is up-to-date.
+            
+             </summary>
+             <returns>The master checksum for the file set.</returns>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getFileCompressedAsync(System.String,System.Int32,System.Int32,Ice.Current)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="current">The Current object for the invocation.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getLargeFileCompressedAsync(System.String,System.Int64,System.Int32,Ice.Current)">
+             <summary>
+             Read the specified file.
+             This operation may only return fewer bytes than requested
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+            
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+            
+             </param>
+             <param name="num">The number of bytes to be read.
+            
+             </param>
+             <param name="current">The Current object for the invocation.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+    </members>
+</doc>

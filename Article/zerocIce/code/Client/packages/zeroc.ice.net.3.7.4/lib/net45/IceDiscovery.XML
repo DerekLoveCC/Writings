@@ -1,0 +1,422 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IceDiscovery</name>
+    </assembly>
+    <members>
+        <member name="T:IceDiscovery.LookupReplyPrx">
+            <summary>
+            The LookupReply interface is used by IceDiscovery clients to answer requests
+            received on the Lookup interface.
+            </summary>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.foundObjectById(Ice.Identity,Ice.ObjectPrx,Ice.OptionalContext)">
+             <summary>
+             Reply to the findObjectById request.
+             </summary>
+             <param name="id">The identity of the object.
+            
+             </param>
+             <param name="prx">The proxy of the object.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.foundObjectByIdAsync(Ice.Identity,Ice.ObjectPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Reply to the findObjectById request.
+             </summary>
+             <param name="id">The identity of the object.
+            
+             </param>
+             <param name="prx">The proxy of the object.</param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.begin_foundObjectById(Ice.Identity,Ice.ObjectPrx,Ice.OptionalContext)">
+             <summary>
+             Reply to the findObjectById request.
+             </summary>
+             <param name="id">The identity of the object.
+            
+             </param>
+             <param name="prx">The proxy of the object.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.begin_foundObjectById(Ice.Identity,Ice.ObjectPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Reply to the findObjectById request.
+             </summary>
+             <param name="id">The identity of the object.
+            
+             </param>
+             <param name="prx">The proxy of the object.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.begin_foundObjectById(Ice.Identity,Ice.ObjectPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Reply to the findObjectById request.
+             </summary>
+             <param name="id">The identity of the object.
+            
+             </param>
+             <param name="prx">The proxy of the object.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.end_foundObjectById(Ice.AsyncResult)">
+            <summary>
+            Reply to the findObjectById request.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.foundAdapterById(System.String,Ice.ObjectPrx,System.Boolean,Ice.OptionalContext)">
+             <summary>
+             Reply to the findAdpaterById request.
+             </summary>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="prx">The adapter proxy (a dummy proxy created by the adapter).
+             The proxy provides the adapter endpoints.
+            
+             </param>
+             <param name="isReplicaGroup">True if the adapter is also a member of a
+             replica group.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.foundAdapterByIdAsync(System.String,Ice.ObjectPrx,System.Boolean,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Reply to the findAdpaterById request.
+             </summary>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="prx">The adapter proxy (a dummy proxy created by the adapter).
+             The proxy provides the adapter endpoints.
+            
+             </param>
+             <param name="isReplicaGroup">True if the adapter is also a member of a
+             replica group.</param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.begin_foundAdapterById(System.String,Ice.ObjectPrx,System.Boolean,Ice.OptionalContext)">
+             <summary>
+             Reply to the findAdpaterById request.
+             </summary>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="prx">The adapter proxy (a dummy proxy created by the adapter).
+             The proxy provides the adapter endpoints.
+            
+             </param>
+             <param name="isReplicaGroup">True if the adapter is also a member of a
+             replica group.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.begin_foundAdapterById(System.String,Ice.ObjectPrx,System.Boolean,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Reply to the findAdpaterById request.
+             </summary>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="prx">The adapter proxy (a dummy proxy created by the adapter).
+             The proxy provides the adapter endpoints.
+            
+             </param>
+             <param name="isReplicaGroup">True if the adapter is also a member of a
+             replica group.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.begin_foundAdapterById(System.String,Ice.ObjectPrx,System.Boolean,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Reply to the findAdpaterById request.
+             </summary>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="prx">The adapter proxy (a dummy proxy created by the adapter).
+             The proxy provides the adapter endpoints.
+            
+             </param>
+             <param name="isReplicaGroup">True if the adapter is also a member of a
+             replica group.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyPrx.end_foundAdapterById(Ice.AsyncResult)">
+            <summary>
+            Reply to the findAdpaterById request.
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:IceDiscovery.LookupPrx">
+            <summary>
+            The Lookup interface is used by IceDiscovery clients to look for objects
+            and adapters using UDP multicast.
+            </summary>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.findObjectById(System.String,Ice.Identity,IceDiscovery.LookupReplyPrx,Ice.OptionalContext)">
+             <summary>
+             Request to find an Ice object
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The object identity.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching object is found.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.findObjectByIdAsync(System.String,Ice.Identity,IceDiscovery.LookupReplyPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Request to find an Ice object
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The object identity.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching object is found.</param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.begin_findObjectById(System.String,Ice.Identity,IceDiscovery.LookupReplyPrx,Ice.OptionalContext)">
+             <summary>
+             Request to find an Ice object
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The object identity.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching object is found.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.begin_findObjectById(System.String,Ice.Identity,IceDiscovery.LookupReplyPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Request to find an Ice object
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The object identity.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching object is found.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.begin_findObjectById(System.String,Ice.Identity,IceDiscovery.LookupReplyPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Request to find an Ice object
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The object identity.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching object is found.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.end_findObjectById(Ice.AsyncResult)">
+            <summary>
+            Request to find an Ice object
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.findAdapterById(System.String,System.String,IceDiscovery.LookupReplyPrx,Ice.OptionalContext)">
+             <summary>
+             Request to find an object adapter
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching adapter is found.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.findAdapterByIdAsync(System.String,System.String,IceDiscovery.LookupReplyPrx,Ice.OptionalContext,System.IProgress{System.Boolean},System.Threading.CancellationToken)">
+             <summary>
+             Request to find an object adapter
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching adapter is found.</param>
+             <param name="context">Context map to send with the invocation.</param>
+             <param name="progress">Sent progress provider.</param>
+             <param name="cancel">A cancellation token that receives the cancellation requests.</param>
+             <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.begin_findAdapterById(System.String,System.String,IceDiscovery.LookupReplyPrx,Ice.OptionalContext)">
+             <summary>
+             Request to find an object adapter
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching adapter is found.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.begin_findAdapterById(System.String,System.String,IceDiscovery.LookupReplyPrx,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Request to find an object adapter
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching adapter is found.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.begin_findAdapterById(System.String,System.String,IceDiscovery.LookupReplyPrx,Ice.OptionalContext,Ice.AsyncCallback,System.Object)">
+             <summary>
+             Request to find an object adapter
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching adapter is found.</param>
+             <param name="context">The Context map to send with the invocation.</param>
+             <param name="callback">Asynchronous callback invoked when the operation completes.</param>
+             <param name="cookie">Application data to store in the asynchronous result object.</param>
+             <returns>An asynchronous result object.</returns>
+        </member>
+        <member name="M:IceDiscovery.LookupPrx.end_findAdapterById(Ice.AsyncResult)">
+            <summary>
+            Request to find an object adapter
+            </summary>
+            <param name="asyncResult">The asynchronous result object for the invocation.</param>
+        </member>
+        <member name="T:IceDiscovery.LookupReplyOperations_">
+            <summary>
+            The LookupReply interface is used by IceDiscovery clients to answer requests
+            received on the Lookup interface.
+            </summary>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyOperations_.foundObjectById(Ice.Identity,Ice.ObjectPrx,Ice.Current)">
+             <summary>
+             Reply to the findObjectById request.
+             </summary>
+             <param name="id">The identity of the object.
+            
+             </param>
+             <param name="prx">The proxy of the object.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupReplyOperations_.foundAdapterById(System.String,Ice.ObjectPrx,System.Boolean,Ice.Current)">
+             <summary>
+             Reply to the findAdpaterById request.
+             </summary>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="prx">The adapter proxy (a dummy proxy created by the adapter).
+             The proxy provides the adapter endpoints.
+            
+             </param>
+             <param name="isReplicaGroup">True if the adapter is also a member of a
+             replica group.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceDiscovery.LookupOperations_">
+            <summary>
+            The Lookup interface is used by IceDiscovery clients to look for objects
+            and adapters using UDP multicast.
+            </summary>
+        </member>
+        <member name="M:IceDiscovery.LookupOperations_.findObjectById(System.String,Ice.Identity,IceDiscovery.LookupReplyPrx,Ice.Current)">
+             <summary>
+             Request to find an Ice object
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The object identity.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching object is found.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceDiscovery.LookupOperations_.findAdapterById(System.String,System.String,IceDiscovery.LookupReplyPrx,Ice.Current)">
+             <summary>
+             Request to find an object adapter
+             </summary>
+             <param name="domainId">The IceDiscovery domain identifier. An IceDiscovery client only
+             replies to requests with a matching domain identifier.
+            
+             </param>
+             <param name="id">The adapter ID.
+            
+             </param>
+             <param name="reply">The proxy of the LookupReply interface that should be used to send
+             the reply if a matching adapter is found.</param>
+             <param name="current">The Current object for the invocation.</param>
+        </member>
+    </members>
+</doc>
