@@ -18,7 +18,7 @@
 
 * Slice（Specification Language for Ice）：用于定义client和server通信接口的领域特定语言（DSL），在 https://doc.zeroc.com/ice/3.7/the-slice-language 中有关于它的详细信息
 * Communicator：Ice运行时的入口点，它所关联的资源包括：线程池，运行时的配置属性，对象工厂，Logger（用于处理Ice运行时产生的log消息），Plug-in manager，Object Adapters等
-* Ice Object：是一个抽象的概念，它具用类型，标识等信息，有点像C#或Java中类的概念
+* Ice Object：是一个抽象的概念，它具有类型，标识等信息，有点像C#或Java里类的概念
 * Servants：上面说到Ice Object是抽象概念，而这里的Servant就是提供具体操作的实体，它负责响应client请求的，一个Servant可以对应一个或者多个Ice Object
 * Proxy：代表Ice Object，client使用proxy来和server交互
 * Ice Object Adapter：存在服务端的communicator中，负责Ice运行时和Server端应用代码的交互，它会和一个或多个Endpoint绑定并接收client端的请求，然后把请求转给对应的Servant从而执行应用代码
@@ -152,7 +152,7 @@
 
 
 ### 总结
->本文介绍了ZeroC Ice的概念并用一个demo详细说明了具体使用方法，期望对读者能够有所帮助
+>本文介绍了ZeroC Ice的概念并用一个demo详细说明了具体使用方法，完整代码请参考 https://github.com/DerekLoveCC/Writings/tree/master/Article/zerocIce/code ，期望对读者能够有所帮助
 
 
 ![Fintech技术汇](https://img2020.cnblogs.com/blog/498574/202008/498574-20200801213206265-563825556.jpg)
