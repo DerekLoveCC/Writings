@@ -31,12 +31,12 @@
 
 ### 3. 通过ID访问对象
 
-> 有时候为了追踪一个对象，我们会给该对象生成一个Id，然后无论再什么上下文里，我们都可以通过这个Id来访问该对象，注意：这个Id并不会阻碍对象的垃圾收集。请看下面的例子：
+> 有时候为了追踪一个对象，我们会给该对象生成一个Id，然后无论在什么上下文里，我们都可以通过这个Id来访问该对象，注意：这个Id并不会阻碍对象的垃圾收集。请看下面的例子：
 ![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200805000824168-1652675365.png)
 
 ### 4. 重新调用函数
 
-> 一个函数调用完了，如果想重新进入函数体debug怎么办，一种方法是有鼠标拖过去，另一中就是使用Immediate Window直接调用，这里假设GetPersonsAgeUnder18以及调用完了，但是想debug看看它内部的实现，怎么做？首先，再GetPersonsAgeUnder18中下一个断点，然后再Immediate Window中调用GetPersonsAgeUnder18， VS会自动再断点处停下，如下所示
+> 一个函数调用完了，如果想重新进入函数体debug怎么办，一种方法是有鼠标拖过去，另一种就是使用Immediate Window直接调用，这里假设GetPersonsAgeUnder18以及调用完了，但是想debug看看它内部的实现，怎么做？首先，再GetPersonsAgeUnder18中下一个断点，然后再Immediate Window中调用GetPersonsAgeUnder18， VS会自动在断点处停下，如下所示
 ![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200805001053683-2046152193.png)
 
 ### 5. 消除边界效应
@@ -45,7 +45,7 @@
 ![](https://img2020.cnblogs.com/blog/498574/202008/498574-20200805000853254-544264391.png)
 
 
-> 需要说明的是，nse并不是对所有的函数都有效，只是对一些简单的函数有效。
+> 需要说明的是，nse并不是对所有的函数都有效，只是对一些简单的函数有效。完整代码请访问：https://github.com/DerekLoveCC/Writings/tree/master/Article/VSImmediateWindow/code/ImmediateWindowDemo
 
 
 ![Fintech技术汇](https://img2020.cnblogs.com/blog/498574/202008/498574-20200801213206265-563825556.jpg)
