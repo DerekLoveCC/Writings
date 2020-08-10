@@ -1,3 +1,4 @@
+# Spring Boot VS Spring Cloud
 >作为一名初学者，经常搞不清楚Spring Boot和Spring Cloud的区别，本文做了一些简单的总结。
 
 1. 两者都是开源的框架，都是Spring Framework的一部分；在微服务方面，Spring Boot主要用来创建微服务，而Spring Cloud用来进行配置管理。
