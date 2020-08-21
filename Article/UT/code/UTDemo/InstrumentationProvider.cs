@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using UTDemo.Common;
 
 namespace UTDemo
 {
@@ -24,7 +25,8 @@ namespace UTDemo
             this.profilerModule = InstrumentationProvider.LoadProfilerModule(profilerPath);
             setDetourProvider = LibraryMethods.GetFunction<NativeSetDetourProvider>(this.profilerModule, "SetDetourProvider");
             canDetour = LibraryMethods.GetFunction<NativeCanDetour>(this.profilerModule, "CanDetour");
-            if (setDetourProvider(InstrumentationProvider.detourProviderAddress) != 0)
+            var result = setDetourProvider(InstrumentationProvider.detourProviderAddress);
+            if (result != 0)
             {
                 throw new Exception(profilerPath);
             }

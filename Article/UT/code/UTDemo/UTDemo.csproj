@@ -83,12 +83,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\EnvironmentUtils.cs" />
     <Compile Include="InstrumentationProvider.cs" />
-    <Compile Include="LibraryMethods.cs" />
+    <Compile Include="Common\LibraryMethods.cs" />
     <Compile Include="MainClass.cs" />
-    <Compile Include="PROCESSOR_ARCHITECTURE.cs" />
-    <Compile Include="SYSTEM_INFO.cs" />
-    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Common\PROCESSOR_ARCHITECTURE.cs" />
+    <Compile Include="Common\SYSTEM_INFO.cs" />
+    <Compile Include="Common\NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

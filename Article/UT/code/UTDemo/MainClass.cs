@@ -6,6 +6,7 @@ using System.Fakes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UTDemo.Common;
 
 namespace UTDemo
 {
@@ -13,16 +14,35 @@ namespace UTDemo
     {
         public static void Main()
         {
-            PlatformThread pt = new PlatformThread();
+            Console.WriteLine(EnvironmentUtils.GetEnvironments());
+            Console.Read();
+            try
+            {
 
+                TestCustomized();
 
-            var dllPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\IntelliTrace";
-            Environment.SetEnvironmentVariable("INTELLITRACE_PROFILER_DIRECTORY", @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\IntelliTrace");
-            Environment.SetEnvironmentVariable("COR_ENABLE_PROFILING", "1");
-            Environment.SetEnvironmentVariable("COR_PROFILER", "{ 9317ae81-bcd8-47b7-aaa1-a28062e41c71}");
+                //UseFakesBuiltIn();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
+        private static void TestCustomized()
+        {
+            var dirPath = EnvironmentUtils.GetProfilerPath();
+            var result = NativeMethods.LoadLibraryW(dirPath);
+            var r = NativeMethods.LoadLibraryW(@"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\IntelliTrace\ProfilerProxy\x86\Microsoft.IntelliTrace.ProfilerProxy.dll");
 
-            var result = NativeMethods.LoadLibraryW(dllPath + "\\Microsoft.IntelliTrace.Profiler.dll");
+            new InstrumentationProvider().Initialize();
+        }
+
+        private static void UseFakesBuiltIn()
+        {
+            var dirPath = EnvironmentUtils.GetProfilerPath();
+            var result = NativeMethods.LoadLibraryW(dirPath);
+            var r = NativeMethods.LoadLibraryW(@"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\IntelliTrace\ProfilerProxy\x86\Microsoft.IntelliTrace.ProfilerProxy.dll");
 
 
             using (var s = ShimsContext.Create())
