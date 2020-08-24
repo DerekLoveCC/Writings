@@ -61,3 +61,6 @@ sync_hook.script
 /Article/UT/code/UTDemo/.vs/UTDemo/v16/TestStore/0
 /Article/UT/code/UTDemo.UnitTests/bin
 /Article/UT/code/UTDemo.UnitTests/obj/Debug
+/Article/UT/code/UTDemo/bin/x86/Debug
+/Article/UT/code/UTDemo/obj/x86/Debug
+/Article/UT/code/UTDemo.UnitTests/obj/x86/Debug
