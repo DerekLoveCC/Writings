@@ -1,6 +1,6 @@
 >表达式体(Expression body)
 
-表达式体能够以一种更加简洁、可读的方式来实现类的成员，其语法如下：
+表达式体是C#6.0中引入且在后续版本中不断加强的功能，它能够以一种更加简洁、可读的方式来实现类的成员，其语法如下：
 ```c#
 member => expression;
 ```
@@ -40,7 +40,7 @@ public class ExpressionBody
 ```
 >表达式体属性
 
-属性的get和set都可以是用表达式体，举例如下：
+属性的get和set都可以用表达式体，举例如下：
 ```c#
 public class ExpressionBody
 {
