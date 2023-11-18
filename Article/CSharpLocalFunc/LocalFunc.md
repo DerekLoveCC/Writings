@@ -12,6 +12,7 @@
 * 匿名方法
 * Lambda 表达式
 * 其他本地函数
+  
 注意：不能在表达式体中声明本地函数
 
 > 声明本地函数的语法
@@ -19,13 +20,15 @@
 <modifiers> <return-type> <method-name> <parameter-list>
 ```
 
-modifiers： 可以是async，unsafe，static或者extern，但不能使用访问修饰符private，public，protected等。如果使用了static，那么该本地方法不能访问其外部成员中的本地变量。external必须和static一起使用。
+modifiers： 可以是async，unsafe，static或者extern，但不能使用访问修饰符private，public，protected等。如果使用了static，那么该本地函数不能访问其外部成员中的本地变量。extern必须和static一起使用。
 
 parameter-list: 参数列表中的参数名不能使用上下文关键字value
 
 > 对异常的处理
 
 与异步方法和迭代器方法不同，本地函数允许异常立即抛出。下面是迭代器方法和本地函数的对比
+
+<center><b>使用yeild的迭代器方法</b></center>
 
 ```csharp
 
@@ -53,7 +56,8 @@ parameter-list: 参数列表中的参数名不能使用上下文关键字value
         }
 
 ```
-<center>使用yeild的迭代器方法</center>
+
+<center><b>使用本地函数的方法</b></center>
 
 ```csharp
         public IEnumerable<char> PrintAlphabetSubsetUsingLocalFunc(char start, char end)
@@ -82,7 +86,6 @@ parameter-list: 参数列表中的参数名不能使用上下文关键字value
             }
         }
 ```
-<center><b>使用本地函数的方法</b></center>
 
 > 当我们使用非a-z的参数调用这两个函数时，PrintAlphabetSubset并不会立即抛出异常，而是在枚举其返回结果时抛出，比如下面的调用会先打印出“获取到PrintAlphabetSubset的返回值”，再打印异常信息。
 
@@ -134,7 +137,7 @@ parameter-list: 参数列表中的参数名不能使用上下文关键字value
 
 本地函数和Lambda表达式在很多地方可以互换，至于选择本地函数还是Lambda表达式通常也是个人偏好或编码风格的问题。但两者在以下地方还是有区别的：
 
-1. 本地函数和普通方法一样都有名字，参数以及返回值，而Lambda表达式是需要一个代理类型的变量，如果Action，Func类的变量，此代理类型决定了Lamba表达式的函数签名，比如在C# 10之前的版本，类似var x = ()=>1;的语句是非法的，需要写成Func<int> x=()=>1;
+1. 本地函数和普通方法一样都有名字，参数以及返回值，而Lambda表达式是需要一个代理类型的变量，如果Action，Func类的变量，此代理类型决定了Lamba表达式的函数签名，比如在C# 10之前的版本，类似var x = ()=>1;的语句是非法的，需要写成Func\<int> x=()=>1;
 2. 本地函数本质上是函数，其定义在编译时确定，调用它的语句可以在其定义语句之前。Lambda表达式是对象，而对象的创建是在运行时，所以其对应变量的声明必须先用其使用
 3. Lambda表达式在声明的时候会被转换成Delegate，而本地函数较为灵活，可以作为传统的函数使用，也可以作为代理使用，且只有当作为代理使用的时候，才会转化为代理对象
 4. Lambda表达式总是会导致堆分配，而本地函数有可能不需要堆分配：如果本地函数不被当成Delegate使用，且其捕获的变量也不会被其他的Lambda表达式或作为Delegate使用的本地函数所捕获，那么它将不会导致Heap分配，从能够提升性能
