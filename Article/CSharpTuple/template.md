@@ -1,6 +1,6 @@
->元组
+>什么是元组？
 
-元组即Tuple是C#7.0中引入的功能，使用精简的语法将数据元素组合到一个轻量级的数据结构中。
+元组即Tuple是C#7.0中引入的功能，能够使用精简的语法将数据元素组合到一个轻量级的数据结构中。
 
 >声明、初始化和访问元组
 
@@ -38,15 +38,15 @@ public void CreateTuple()
 
 
     (string, double) namedTuple4 = (Fruit: "apple", Price: 12.1);
-    //Console.WriteLine($"Fruit: {namedTuple1_1.Fruit}, Price: ${namedTuple1_1.Price}");//编译错误
+    //Console.WriteLine($"Fruit: {namedTuple4.Fruit}, Price: ${namedTuple4.Price}");//编译错误
     Console.WriteLine($"Fruit: {namedTuple4.Item1}, Price: ${namedTuple4.Item2}");
 }
 ```
-从上面的例子中我们可以看到，在创建元组时，我们可以指定元组里元素的类型和名字，其中名字可以省略，而类型也可以通过使用var来让编译器进行自动推断。当不指定元素的名字时，只能通过默认名：Item1，Item2，... ,Itemn来访问元组的元素，当制定了元素的名称时，既可以通过Item1，Item2，... ,Itemn访问，也可以通过指定的名字访问。
+从上面的例子中我们可以看到，在创建元组时，我们可以指定元组里元素的类型和名字，其中名字可以省略，而类型也可以通过使用var来让编译器进行自动推断。当不指定元素的名字时，只能通过默认名：Item1，Item2，... ,Itemn来访问元组的元素，当指定了元素的名称时，既可以通过Item1，Item2，... ,Itemn访问，也可以通过指定的名字访问。
 指定元组元素名称的方式有三种：
 1. 在其初始化表达式中，和值一起指定，如上面例子中的namedTuple1
 2. 在变量的声明中同时指定元素的类型和名字，如上面例子中的namedTuple2
-3. 通过变量的名字推断，如上面例子中的namedTuple1_1，会使用变量的名字fruit和price作为相应元组元素的名字
+3. 通过变量的名字推断，如上面例子中的namedTuple1_1，会使用变量的名字fruit和price作为元组相应元素的名字
 
 当同时使用1，2两种方式指定元素的名字时，方式2优先级高，如例子中的namedTuple3和namedTuple4， 其中namedTuple3需要使用Fruit1和Price1访问，而namedTuple4由于在声明中只指定了类型，没有指定名字，所以只能使用Item1，Item2访问。
 
@@ -64,7 +64,7 @@ global using Fruit = (string Name, double Price);
 1. 最常见的使用场景是作为函数的返回值。在之前，为了从函数中返回多个值，要么使用class或者struct，要么使用out或ref，现在元组提供了一种更加方便的方法。
 2. 在某些情况下取代匿名类，如在Linq查询中
 
->元组的比较
+>元组的比较逻辑
 
 元组支持相等(==)和不相等(!=)运算符，以==为例，其逻辑是以短路的方式挨个比较相同位置的元素，如果发现不相同则立即停止比较并返回false，如果所有元素都相等则返回true。此外，只有满足以下两个条件的元组之间才可以比较，否则无法编译：
 1. 元素的个数必须相同
@@ -74,14 +74,14 @@ global using Fruit = (string Name, double Price);
 ```c#
 public void CompareTest()
 {
-    var t1 = (Name: "apple", Price: 12.1, Weight: 100);
-    var t2 = (Name: "apple", Price: 12.1);
-    var t3 = (Name: "apple", Price: (12.1, 1));
-    var t4 = (Name: "apple", Price: 12.1);
-    var t5 = (Name: "apple1", Price: 12.11);
-    var t6 = ("apple", 12.1);
-    var t7 = ("apple1", 12.1);
-    var t8 = (Name1: "apple", Price1: 12.1);
+    var t1 = (Name: "apple", Price: 12.1d, Weight: 100);
+    var t2 = (Name: "apple", Price: 12.1d);
+    var t3 = (Name: "apple", Price: (12.1d, 1));
+    var t4 = (Name: "apple", Price: 12.1d);
+    var t5 = (Name: "apple1", Price: 12.11d);
+    var t6 = ("apple", 12.1d);
+    var t7 = ("apple1", 12.1d);
+    var t8 = (Name1: "apple", Price1: 12.1d);
 
     //var r1 = t1 == t2;//由于元素个数不同，无法编译
     //var r2 = t2 == t3;//虽然元素个数相同，但第二个元素即Price无法比较，所以无法编译
@@ -113,24 +113,24 @@ public void CompareTest()
 其基本逻辑是按照元组中元素的顺序挨个赋值，而元素的名字会被忽略，下面看一个例子：
 
 ```c#
-(string Name, double Price, int Weight) t1 = ("apple", 12.1, 10);
+(string Name, double Price, int Weight) t1 = ("apple", 12.1d, 10);
 (string Name1, double Price1, double Weight1) t2 = t1;
 Console.WriteLine($"{t2.Name1},{t2.Price1},{t2.Weight1}");
 ```
 
 >元组解构
 
-可以通过元组的解构将其元素分配给不同的变量，下面是以下例子：
+可以通过元组的解构将其元素分配给不同的变量，下面是一些例子：
 ```c#
 
 public void TupleDeconstruct()
 {
-    var t1 = ("apple", 12.1, 10);
+    var t1 = ("apple", 12.1d, 10);
     //使用var
     var (name, price, weight) = t1;
     Console.WriteLine($"{name}, ${price}, {weight}");
     //指定每个元素的类型
-    (string name1, double price1, doubleweight1) = t1;
+    (string name1, double price1, double weight1) = t1;
     Console.WriteLine($"{name1}, ${price1}, {weight1}");
     //混合使用var和具体类型
     (var name2, double price2, var weight2) = t1;
