@@ -84,27 +84,80 @@
   BoxedValue(10);
   BoxedValue(10.0d);
   
-1. constant pattern
+2. constant pattern
    
    测试一个表达式的值是否等于指定的常量，常量可以是字符/字符串，整数数字，浮点数数字等字面常量，也可以是null，枚举或者const常量，总之需要是在编译时就确定的量。此外，除了Span<char>和ReadOnlySpan<char>可以和常量字符串比较外，其他的表达式值必须能够转化为对应常量的类型。
+   ```c#
+   public static void Test(object obj)
+   {
+     if (obj is null)
+     {
+       Console.WriteLine("obj is null");
+     }
+ 
+     if (obj is "hello")
+     {
+       Console.WriteLine("obj is string constant: hello");
+     }
+ 
+     if (obj is 'h')
+     {
+       Console.WriteLine("obj is char: h");
+     }
+ 
+     if (obj is 1)
+     {
+       Console.WriteLine("obj is int const: 1");
+     }
+ 
+     if (obj is 1.0d)
+     {
+       Console.WriteLine("obj is double const: 1.0");
+     }
+   }
+   Test(null);
+   Test("hello");
+   Test('h');
+   Test(1);
+   Test(1.0);
 
-2. relational pattern
+3. relational pattern
    
    将表达式的值与指定常量进行比较，即使用关系运算符>,<,>=,<=将表达式的值与一个常量或者常量表达式相比较。如果表达式的值是null或者无法通过拆箱转换，可空转换为目标常量的类型，那么认为模式不匹配。
+   ```c#
+   public static void Test(int salary)
+   {
+      var result = salary switch
+      {
+         < 10000 => "staff",
+         >= 10000 and < 100000 => "manager",
+         >= 100000 => "CEO"
+      };
+      Console.WriteLine(result);
+   }
 
-3. logical pattern
+   Test(1000);
+   Test(99999);
+   Test(100000);
+
+4. logical pattern
    
-   使用模式连接符：and, or, not对其他pattern进行组合
-
-not：表示否定，即如果原模式匹配，则连接后的模式不匹配，原模式不匹配，则连接后的模式匹配
-
-or： 表示所连接的任意一个模式匹配，则匹配
-
-and: 表示所连接的模式都匹配，才匹配
-
-它们的的优先级从高到底为：not > and > or。只有在is表达式中，它们的优先级大于逻辑运算符，其他情况下其优先级小于逻辑运算符||，！，&&，|，&。
-
-需要注意的是，运行时先校验哪个pattern是不确定的，所以没有逻辑运算符中的短路逻辑。
+   使用模式连接符：and, or, not对其他pattern进行组合. not表示否定，即如果原模式匹配，则连接后的模式不匹配，原模式不匹配，则连接后的模式匹配。or表示所连接的任意一个模式匹配，则匹配。and表示所连接的模式都匹配，才匹配。
+   ```c#
+   public static void Test(int score)
+   {
+       var r = score switch
+       {
+           < 0 or > 100 => "invalid score",
+           >= 0 and < 60 => "bad",
+           >= 60 and < 80 => "good",
+           >= 80 and <= 100 => "great"
+       };
+       Console.WriteLine(r);
+    }
+  它们的的优先级从高到底为：not > and > or。只有在is表达式中，它们的优先级大于逻辑运算符，其他情况下其优先级小于逻辑运算符||，！，&&，|，&。
+  
+  需要注意的是，运行时先校验哪个pattern是不确定的，所以没有逻辑运算符中的短路逻辑。
 
 5. positional pattern
    
