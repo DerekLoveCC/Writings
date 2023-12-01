@@ -34,12 +34,12 @@
   ```c#
   public static void Inherit(object obj)
   {
-    if (obj is Array array)
-    {
-        Console.WriteLine($"it is an array and its length is {array.Length}");
-    }
+     if (obj is TextReader textReader)
+     {
+        Console.WriteLine($"it is a text reader, real type is {textReader.GetType()}");
+     }
   }
-  Inherit(new int[] { 1, 2, 3, 4, 5 })
+  Inherit(new StringReader("this is a string to read"));
 
 * 当目标类型是接口时，表达式值的运行时类型实现了该接口
   ```c#
