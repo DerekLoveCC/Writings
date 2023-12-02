@@ -84,7 +84,7 @@
   BoxedValue(10);
   BoxedValue(10.0d);
   
-2. constant pattern
+2. 常量模式（constant pattern）
    
    测试一个表达式的值是否等于指定的常量，常量可以是字符/字符串，整数数字，浮点数数字等字面常量，也可以是null，枚举或者const常量，总之需要是在编译时就确定的量。此外，除了Span<char>和ReadOnlySpan<char>可以和常量字符串比较外，其他的表达式值必须能够转化为对应常量的类型。
    ```c#
@@ -121,7 +121,7 @@
    Test(1);
    Test(1.0);
 
-3. relational pattern
+3. 关系模式（relational pattern）
    
    将表达式的值与指定常量进行比较，即使用关系运算符>,<,>=,<=将表达式的值与一个常量或者常量表达式相比较。如果表达式的值是null或者无法通过拆箱转换，可空转换为目标常量的类型，那么认为模式不匹配。
    ```c#
@@ -159,17 +159,62 @@
   
   需要注意的是，运行时先校验哪个pattern是不确定的，所以没有逻辑运算符中的短路逻辑。
 
-5. positional pattern
-   
-   用于解构表达式的值，然后把结果与相应的模式进行匹配，这些模式被称为嵌套模式，因为它们出现在positional模式里，即模式里的模式。
+5. property pattern
 
-   
+   把表达式值的属性或字段与嵌套的模式进行比较，嵌套模式指出现在其他模式中的模式，比如出现在property模式中的relational模式，即模式里的模式。
 
-6. property pattern：
-7. list pattern:
-8. var pattern:
-9.  discard pattern:
-10. :
+   当表达式的值非空，且与属性或字段对应的每个嵌套模式都match时，property模式才算match。下面看一个微软官网上的例子：
+   ```c#
+   public static string TakeFive(object input) => input switch
+   {
+       string { Length: >= 5 } s => s.Substring(0, 5),
+       string s => s,
+       ICollection<char> { Count: >= 5 } symbols => new string(symbols.Take(5).ToArray()),
+       ICollection<char> symbols => new string(symbols.ToArray()),
+       null => throw new ArgumentNullException(nameof(input)),
+       _ => throw new ArgumentException("Not supported input type."),
+   };
+   Console.WriteLine(TakeFive("Hello, world!"));  // output: Hello
+   Console.WriteLine(TakeFive("Hi!"));  // output: Hi!
+   Console.WriteLine(TakeFive(new[] { '1', '2', '3', '4', '5', '6', '7' }));  // output: 12345
+   Console.WriteLine(TakeFive(new[] { 'a', 'b', 'c' }));  // output: abc
+   ```
+在上面的switch表达式例子中，同时使用了类型，声明和属性模式，如：string { Length: >= 5 } s => s.Substring(0, 5)表示当input的类型是string且长度大于5时，将其值赋给s并返回s的前5个字符。
+
+property模式是递归模式，所以我们可以使用任何模式作为其嵌套模式，如下面的例子使用了property模式作为另一个property pattern的嵌套模式：
+```c#
+public record Point(int X, int Y);
+public record Segment(Point Start, Point End);
+
+static bool IsAnyEndOnXAxis(Segment segment) => segment is { Start: { Y: 0 } } or { End: { Y: 0 } };
+static bool IsAnyEndOnXAxis(Segment segment) => segment is { Start.Y: 0 } or { End.Y: 0 };//在c#10及之后的版本，可以使用扩展的属性模式，语法更精简
+```
+
+6. positional pattern
+   
+   用于解构表达式的值，然后把结果与相应的嵌套模式进行匹配，表达式值的类型需要支持解构操作，元组和record本身已经支持解构，所以可以直接使用位置模式。
+   
+   位置模式的形式有点像元组，它使用圆括号包围一些其他的嵌套模式如：常量模式，关系模式
+   ```c#
+   public static void Test(object obj)
+   {
+       var result = obj switch
+       {
+           (1, 2) => "number: 1 and 2",
+           ("x", "y") => "string: x and y",
+           (2, > 5) => "first number is 2 and second number > 5",
+           _ => "unsupported"
+       }
+       Console.WriteLine(result);
+   }
+   Test((1, 2));//输出"number: 1 and 2"
+   Test(("x", "y"));//输出string: x and y
+   Test((2, 6));//输出first number is 2 and second number > 5
+   Test("notsupported");//输出unsupported
+
+7. var pattern:
+8. discard pattern:
+9. list pattern:
 
 >常见的使用场景
 
