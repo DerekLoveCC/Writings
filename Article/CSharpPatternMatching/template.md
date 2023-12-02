@@ -116,11 +116,11 @@ public static void Test(object obj)
     Console.WriteLine("obj is double const: 1.0");
   }
 }
-Test(null);
-Test("hello");
-Test('h');
-Test(1);
-Test(1.0);
+Test(null);//输出obj is null
+Test("hello");//obj is string constant: hello
+Test('h');//输出obj is char: h
+Test(1);//输出obj is int const: 1
+Test(1.0);//输出obj is double const: 1.0
 ```
 
 3. 关系模式（relational pattern）
@@ -178,7 +178,7 @@ public static string TakeFive(object input) => input switch
 };
 Console.WriteLine(TakeFive("Hello, world!"));  // output: Hello
 Console.WriteLine(TakeFive("Hi!"));  // output: Hi!
-Console.WriteLine(TakeFive(new[] { '1', '2', '3', '4', '5', '6', '7' }));  // output: 45
+Console.WriteLine(TakeFive(new[] { '1', '2', '3', '4', '5', '6', '7' }));  // output: 12345
 Console.WriteLine(TakeFive(new[] { 'a', 'b', 'c' }));  // output: abc
 ```
 在上面的switch表达式例子中，同时使用了类型，声明和属性模式，如：string { Length: >= 5 } s => s.Substring(0, 5)表示当input的类型是string且长度大于5时，将其值赋给s并返回s的前5个字符。
@@ -213,7 +213,7 @@ Test((1, 2));//输出"number: 1 and 2"
 Test(("x", "y"));//输出string: x and y
 Test((2, 6));//输出first number is 2 and second number > 5
 Test("notsupported");//输出unsupported
-
+```
 7. 变量模式（var pattern）
 
 var模式匹配任何表达式，包括null，并把值赋给一个新声明的变量。var模式可以在switch表达式或语句中，可以和when一起使用。微软官网上的例子如下：
